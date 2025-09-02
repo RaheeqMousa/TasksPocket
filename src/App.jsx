@@ -10,6 +10,7 @@ import Profile from './assets/Pages/Profile/Profile'
 import LoggedInProtectedRouter from './assets/Components/LoggedInProtectedRoute/LoggedInProtectedRouter'
 import AuthProtectedRoute from './assets/Components/AuthProtectedRoute.jsx/AuthProtectedRoute'
 import { BrowserRouter } from 'react-router-dom'
+
 function App() {
 
   return (
