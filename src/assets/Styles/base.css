@@ -68,6 +68,8 @@ a{
 .error{
     color: rgb(197, 0, 0);
     font-weight: bold;
+    align-self: flex-start;
+    margin-top: -20px;
 }
 
 .form-button{
@@ -117,8 +119,10 @@ a{
 }
 
 .form-style .field{
-    gap:10px;
     align-items: center;
+    justify-content: space-between;
+    gap:10px;
+    width: 100%;
 }
 
  @media screen and (max-width: 600px){
