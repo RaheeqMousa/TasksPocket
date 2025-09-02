@@ -14,24 +14,23 @@ function App() {
 
   return (
     <>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<MainLayout/>}>
-          <Route index element={<Home />} />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<Home />} />
 
-          <Route element={LoggedInProtectedRouter}>
-            <Route path="auth/login" element={<Login />} />
-            <Route path="auth/register" element={<Register/>} />
+            <Route element={<LoggedInProtectedRouter />}>
+              <Route path="auth/login" element={<Login />} />
+              <Route path="auth/register" element={<Register />} />
+            </Route>
+
+            <Route element={<AuthProtectedRoute />}>
+              <Route path="user/tasks" element={<Tasks />} />
+              <Route path="user/profile" element={<Profile />} />
+            </Route>
           </Route>
-
-          <Route element={AuthProtectedRoute}>
-            <Route path="user/tasks" element={<Tasks />} />
-            <Route path="user/profile" element={<Profile/>} />
-          </Route>
-
-        </Route>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }

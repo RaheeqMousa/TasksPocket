@@ -1,21 +1,21 @@
-import PocketImg from "./pocket.png"
+import PocketImg from "../../Images/pocket.png"
 import Style from './Navbar.module.scss'
 import {Link} from 'react-router-dom'
 function Navbar(){
     return (
     <header className={`row ${Style.navbar}`}>
-        <section className="row">
+        <div className="row">
             <img src={PocketImg} alt="pocket image" title="pocket image" width={30} height={30}/>
             <h1>TaskPocket</h1>
-        </section>
-        <section className={`row ${Style.links}`}>
-            <Link to="/">Home</Link>
-            <Link to="/Tasks">Tasks</Link>
-        </section>
-        <section className={`row ${Style.auth}`}>
-            <Link to="/">Login</Link>
-            <Link to="/Tasks">Register</Link>
-        </section>
+        </div>
+        <ul className={`row ${Style.links}`} aria-label="Main navigation links">
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/user/tasks">Tasks</Link></li>
+        </ul>
+        <ul className={`row ${Style.auth}`} aria-label="Authentication nagivation links">
+            <li><Link to="/auth/login">Login</Link></li>
+            <li><Link to="/auth/register">Register</Link></li>
+        </ul>
     </header>
     );
 }
