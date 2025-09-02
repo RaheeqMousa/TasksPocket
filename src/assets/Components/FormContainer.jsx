@@ -5,10 +5,10 @@ function FormContainer({children, onSubmit}){
     const {register, handleSubmit, formState:{errors}} = useForm();
 
     return(
-        <Form onSubmit={handleSubmit(onSubmit)} className='form-style flex flex-direction-column'>
+        <form onSubmit={handleSubmit(onSubmit)} className='form-style flex flex-direction-column'>
             {React.cloneElement(children, {register,errors})}
             <button type='submit' className='form-button'>Submit</button>
-        </Form>
+        </form>
     );
 }
 export default FormContainer

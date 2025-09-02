@@ -1,9 +1,9 @@
-import { Navigate } from "react-router-dom";
-function AuthProtectedRoute({children}){
+import { Navigate, Outlet } from "react-router-dom";
+function AuthProtectedRoute(){
     const userId= localStorage.getItem('userId');
     if(!userId){
         return <Navigate to='/auth/login' />
     }
-    return children;
+    return <Outlet/>
 }
 export default AuthProtectedRoute;

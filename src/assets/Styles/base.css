@@ -61,6 +61,15 @@ a{
     align-items: flex-end;
 }
 
+.align-center{
+    align-items: center;
+}
+
+.error{
+    color: rgb(197, 0, 0);
+    font-weight: bold;
+}
+
 .form-button{
     color: white;
     background-color: black;
@@ -77,16 +86,24 @@ a{
 }
 
 .form-style{
-    background: linear-gradient(145deg, #6F42C1, #C0C0C0);
-    padding: 80px 30px;
     align-items: center;
     gap:40px;
-    margin: 95px 0px;
     border-radius: 20px;
 }
 
 .controls{
-    gap:20px
+    gap:20px;
+    align-items: center;
+}
+
+.controls a{
+    color:white;
+    font-size: 20px;
+    transition: all 0.6s;
+}
+
+.controls a:hover{
+    font-size: 22px;
 }
 
 .form-style input, .form-style label{
