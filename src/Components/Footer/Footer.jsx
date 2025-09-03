@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import PocketImg from "../../Images/pocket.png"
+import PocketImg from "../../assets/Images/pocket.png"
 import { FaFacebook } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";

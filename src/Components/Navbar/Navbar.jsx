@@ -1,4 +1,4 @@
-import PocketImg from "../../Images/pocket.png"
+import PocketImg from "../../assets/Images/pocket.png"
 import Style from './Navbar.module.scss'
 import {Link} from 'react-router-dom'
 function Navbar(){

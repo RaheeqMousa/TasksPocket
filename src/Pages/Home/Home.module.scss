@@ -1,0 +1,17 @@
+.goal{
+    margin: 40px 0px;
+    justify-content: center;
+    width: 80%;    
+    justify-self: center;
+
+    span{
+        font-size: 32px;
+        max-width: 300px;
+    }
+    img{
+        width: 700px;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 20px;
+    }
+}

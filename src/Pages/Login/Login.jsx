@@ -15,7 +15,7 @@ function Login(){
             const res= await axios.get('https://localhost:7092/api/Users');
             if(!res.ok) console.log("Failed to fecth user");
 
-            const users = await res.json();
+            const users = await res.data;
             const user= users.find((u)=>{ 
                  return u.username==username && u.password==password 
             });

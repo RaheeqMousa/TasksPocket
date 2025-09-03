@@ -9,22 +9,26 @@
   margin: 50px 0px;
   display: flex;
   justify-content: center;
+  overflow: hidden;
+   height: 500px;
+  width: 800px;
 }
 
 .carousel img{
-  width: 600px;
-  height: auto;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 
 .controls {
   position: absolute;
   top: 50%;
-  width: 70%;
+  width: 100%;
   padding: 0 10px;
 }
 
-.controls button{
-  width: 30px;
-  height: 30px;
+.controls svg{
+  cursor: pointer;
 }
+
 
