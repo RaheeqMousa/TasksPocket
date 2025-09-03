@@ -10,30 +10,38 @@ function Register(){
     const [serverError,setServerError]=useState("");
     const navigate=useNavigate();
 
-    const registerSubmit=(data)=>{
+    const registerSubmit=async (data)=>{
         const {username,email,password}=data;
-        
 
-        const user=users.find(u=>{
-            return u.username===username
-        });
+        const newUser = {
+            username: username,
+            email: email,
+            password: password,
+        };
+        try {
+            const response = await fetch("https://localhost:7092/api/Users/create", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(newUser)
+            });
 
-        console.log(user);
-        if(user){
-            setServerError("That username exists, use another.");
-            return;
+            if (!response.ok) {
+                const errorData = await response.json();
+                setServerError(errorData.message || "Failed to create user");
+                return;
+            }
+
+            const createdUser = await response.json();
+
+            localStorage.setItem('userId', createdUser.id);
+
+            navigate('/user/profile');
+        } catch (error) {
+            console.error("Error creating user:", error);
+            setServerError("Server error, please try again later.");
         }
-
-        const newUser={
-            id:users.length+1,
-            username:username,
-            email:email,
-            password:password,
-            tasks:[]
-        }
-
-        localStorage.setItem('userId',newUser.id);
-        navigate('/user/profile');
     }
 
     return(

@@ -1,0 +1,30 @@
+.carousel-wrapper{
+  justify-content: center;
+  width: 100%;
+}
+.carousel {
+  position: relative;
+  width: 100%;
+  border-radius: 10px;
+  margin: 50px 0px;
+  display: flex;
+  justify-content: center;
+}
+
+.carousel img{
+  width: 600px;
+  height: auto;
+}
+
+.controls {
+  position: absolute;
+  top: 50%;
+  width: 70%;
+  padding: 0 10px;
+}
+
+.controls button{
+  width: 30px;
+  height: 30px;
+}
+
