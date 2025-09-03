@@ -2,7 +2,6 @@
 import FormContainer from "../../Components/FormContainer";
 import RegisterForm from "../../Components/RegisterForm/RegisterForm";
 import Style from '../../Styles/auth.module.css'
-import users from '../../../users'
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
