@@ -1,0 +1,48 @@
+.profile-layout{
+    height: 78vh;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+
+    .profile-info{
+        justify-content: center;
+    }
+}
+
+aside{
+    background-color: #36474F;
+    padding: 30px 0px 10px 30px;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+
+    .link{
+        padding: 20px 0px;
+        justify-content: flex-start;
+        gap:10px;
+
+        a{
+            color: #8398A0;
+            font-weight: bold;
+            transition: all 0.4s;
+            &:hover{
+                transform: scale(1.1);
+            }
+        }
+    }
+
+    button{
+        background-color: #8398A0;
+        color: #36474F;
+        font-weight: bold;
+        margin-top: 50px;
+        width: 150px;
+        height: 30px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.4s;
+
+        &:hover{
+            width: 160px;
+            height: 35px;
+        }
+    }
+}

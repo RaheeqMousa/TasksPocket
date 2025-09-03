@@ -17,6 +17,11 @@ p, ul, ol, blockquote,dl, dt, dd,figure, fieldset {
   padding: 0;
 }
 
+h2{
+    text-align: center;
+    margin: 20px 0px;
+}
+
 main{
     width: 100%;
 }
@@ -83,7 +88,6 @@ a{
     cursor: pointer;
 }
 
-
 .form-button:hover{
     width: 140px;
 }
@@ -124,6 +128,10 @@ a{
     justify-content: space-between;
     gap:10px;
     width: 100%;
+}
+
+.justify-center{
+    justify-content: center;
 }
 
  @media screen and (max-width: 600px){

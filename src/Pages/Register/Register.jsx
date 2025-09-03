@@ -4,6 +4,7 @@ import RegisterForm from "../../Components/RegisterForm/RegisterForm";
 import Style from '../../Styles/auth.module.css'
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios'
 
 function Register(){
     const [serverError,setServerError]=useState("");
@@ -18,7 +19,7 @@ function Register(){
             password: password,
         };
         try {
-            const response = await fetch("https://localhost:7092/api/Users/create", {
+            const response = await axios.get("https://localhost:7092/api/Users/create", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -26,13 +27,8 @@ function Register(){
                 body: JSON.stringify(newUser)
             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                setServerError(errorData.message || "Failed to create user");
-                return;
-            }
 
-            const createdUser = await response.json();
+            const createdUser = await response.data;
 
             localStorage.setItem('userId', createdUser.id);
 
