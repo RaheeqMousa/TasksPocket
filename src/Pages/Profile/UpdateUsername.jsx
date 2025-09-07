@@ -11,30 +11,36 @@ function UpdateUsername(){
     const {user,setUser,loading}= useContext(UserContext);
     const [error,setError] = useState(null);
 
-    const handleSubmit=(data)=>{
+    const handleSubmit=async (data)=>{
         const {username}=data;
         const newUser={
             username:username,
+            email:user.email,
             password:user.password,
-            email:user.email
         }
         try{
-            const res= axios.put(`https://localhost:7092/api/Users/update`,{
-                method:"POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(newUser)
-            })
+            const res= await axios.put(`https://localhost:7092/api/Users/update/${localStorage.getItem('userId')}`,
+                newUser,
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
 
-            if(res.data){
-                console.log("User updated successfully");
-                //User username updated successfully
+            console.log(res);
+            if(await res){
+                alert("User's username updated successfully.")
             }
 
             setUser(newUser)
-        }catch(e){
-            setError(e);
+        }catch(er){
+            const message =
+                er.response && er.response.data && er.response.data.message
+                ? er.response.data.message
+                : er.message || "Unexpected error";
+
+            setError(message);
         }
     }
 

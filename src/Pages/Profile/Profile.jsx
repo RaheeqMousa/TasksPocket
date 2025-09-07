@@ -22,7 +22,7 @@ function Profile(){
 
     if(loading || !user)
         return <Loader />
-
+    
     return(
         <section className={`${Style['profile-layout']}`}>
             <aside className="flex flex-direction-column">

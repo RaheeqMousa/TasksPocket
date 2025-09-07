@@ -19,13 +19,15 @@ function Register(){
             password: password,
         };
         try {
-            const response = await axios.get("https://localhost:7092/api/Users/create", {
-                method: "POST",
-                headers: {
+            const response = await axios.post(
+                "https://localhost:7092/api/Users/create",
+                newUser,
+                {
+                    headers: {
                     "Content-Type": "application/json"
-                },
-                body: JSON.stringify(newUser)
-            });
+                    }
+                }
+            )
 
 
             const createdUser = await response.data;
@@ -33,9 +35,14 @@ function Register(){
             localStorage.setItem('userId', createdUser.id);
 
             navigate('/user/profile');
-        } catch (error) {
-            console.error("Error creating user:", error);
-            setServerError("Server error, please try again later.");
+        } catch (er) {
+            console.error("Error creating user:", er);
+            const message =
+                er.response && er.response.data && er.response.data.message
+                ? er.response.data.message
+                : er.message || "Unexpected error";
+
+            setServerError(message);
         }
     }
 
