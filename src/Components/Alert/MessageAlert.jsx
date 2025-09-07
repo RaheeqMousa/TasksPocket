@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Style from './Alert.module.scss';
 
 function MessageAlert({ message, type = "info", duration = 5000 }) {
+    console.log(message)
     const [visible,isVisible] = useState(true);
 
     useEffect(() => {
@@ -34,11 +35,10 @@ function MessageAlert({ message, type = "info", duration = 5000 }) {
                 color: textColors[type] || "black",
             }}
             className={`${Style.modal}`}
-        >
-            <div className={`row ${Style['modal-content']}`}>
-                <button className={Style['close-btn']} onClick={() => { isVisible(false); }}>X</button>
+        >   
+        <button className={Style['close-btn']} onClick={() => { isVisible(false); }}>X</button>
+            <div className={`row ${Style['alert-modal-content']} ${visible ? Style.show : Style.hide}`}>    
                 <p>{message}</p>
-
             </div>
         </div>
 

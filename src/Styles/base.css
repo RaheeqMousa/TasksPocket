@@ -113,14 +113,21 @@ a{
     font-size: 22px;
 }
 
-.form-style input, .form-style label{
+.form-style input, .form-style label, .form-style textarea{
     font-size: 20px;
+}
+
+.form-style textarea{
+    resize: vertical;
+}
+.form-style textarea,.form-style input{
+    width: 250px;
+    border-radius: 20px;
 }
 
 .form-style input{
     width: 250px;
     height: 30px;
-    border-radius: 20px;
 }
 
 .form-style .field{
