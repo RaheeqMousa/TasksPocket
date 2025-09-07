@@ -4,10 +4,10 @@
     top:30%;
     left: 40%;
     justify-content: center;
-    max-width: 45vh;
+    max-width: 300px;
     padding: 20px 40px;
     border-radius:20px;
-    height: 40vh;
+    height: 250px;
     box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2);
     
 
@@ -30,7 +30,7 @@
             border-radius: 10px;
             padding: 10px;
         }
-    .alert-modal-content{
+    .modal-content{
         margin-top: 20px;
         align-items: center;
         justify-content: center;
@@ -42,8 +42,6 @@
             font-weight: bold;
             font-size: 24px;
         }
-
-
 
         .actions{
             gap:10px;

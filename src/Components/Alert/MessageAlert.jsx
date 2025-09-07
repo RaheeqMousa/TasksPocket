@@ -37,7 +37,7 @@ function MessageAlert({ message, type = "info", duration = 5000 }) {
             className={`${Style.modal}`}
         >   
         <button className={Style['close-btn']} onClick={() => { isVisible(false); }}>X</button>
-            <div className={`row ${Style['alert-modal-content']} ${visible ? Style.show : Style.hide}`}>    
+            <div className={`row ${Style['modal-content']} ${visible ? Style.show : Style.hide}`}>    
                 <p>{message}</p>
             </div>
         </div>

@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { FaPlus, FaEdit,FaTrash } from "react-icons/fa";
+import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import DropDown from '../../Components/DropDown/DropDown';
 import Style from './Tasks.module.scss';
 import TaskContainer from "./TaskContainer";
 import axios from "axios";
- 
+
 
 function Tasks() {
     const [mode, setMode] = useState("create");
@@ -22,7 +22,7 @@ function Tasks() {
         } catch (e) {
             console.error(e);
         }
-    },[]);
+    }, []);
 
     useEffect(() => {
         fetchTasks();
@@ -45,33 +45,27 @@ function Tasks() {
     const handleTaskSuccess = (task) => {
         if (mode === "create") {
             setTasks(prev => [...prev, task]);
+        } else if (mode === "delete") {
+            setTasks(p => p.filter(t => t.id !== task));
         } else {
-            setTasks(prev => prev.map(t => t.taskId === task.taskId ? task : t));
+            setTasks(prev => prev.map(t => t.id === task.id ? task : t));
         }
         handleCloseModal();
     };
 
-    const sortedTasks = useMemo(()=>{
-        return [...tasks].sort((a,b)=>{
-            const dateOfFirst=new Date(a.dueDate);
-            const dateOfSec=new Date(b.dueDate);
+    const sortedTasks = useMemo(() => {
+        return [...tasks].sort((a, b) => {
+            const dateOfFirst = new Date(a.dueDate);
+            const dateOfSec = new Date(b.dueDate);
             return dateOfFirst - dateOfSec;
         });
-    },[tasks]);
+    }, [tasks]);
 
     return (
         <>
             <section className={`row justify-center ${Style.tasks}`}>
                 <div className={`row justify-center ${Style.filter}`}>
                     <DropDown />
-                </div>
-
-                {/* Create button */}
-                <div
-                    className={`row justify-center ${Style.create} ${Style.card}`}
-                    onClick={() => handleOpenModal("create")}
-                >
-                    <FaPlus color="#c2d5f6" size={24} />
                 </div>
 
                 {/* Modal */}
@@ -86,17 +80,23 @@ function Tasks() {
 
                 {/* Task list */}
                 <div className={`row ${Style['tasks-list']}`}>
-                    {sortedTasks?.map((task) => (
-                        <div key={task.id} className={`row justify-center ${Style.card}`}>
+                    {/* Create button */}
+                    <div
+                        className={`row justify-center ${Style.create} ${Style.card}`}
+                        onClick={() => handleOpenModal("create")}
+                    >
+                        <FaPlus color="#c2d5f6" size={24} />
+                    </div>
+                    {sortedTasks?.map((task, index) => (
+                        <div key={index} className={`row justify-center ${Style.card}`}>
                             <h2>{task.title}</h2>
                             <p>{task.description}</p>
                             <time>{new Date(task.dueDate).toLocaleDateString()}</time>
 
                             <div
                                 className={`row justify-center ${Style['options']}`}
-                                
                             >
-                                <FaTrash color="red" size={22} onClick={() => handleOpenModal("delete", task.id)} />
+                                <FaTrash color="red" size={22} onClick={() => handleOpenModal("delete", task)} />
                                 <FaEdit color="#c2d5f6" size={22} onClick={() => handleOpenModal("update", task)} />
                             </div>
                         </div>
