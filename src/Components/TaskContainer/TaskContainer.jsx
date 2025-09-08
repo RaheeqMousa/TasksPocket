@@ -1,11 +1,12 @@
-import CreateTaskForm from "./CreateTaskForm";
-import UpdateTaskForm from "./UpdateTaskForm";
-import FormContainer from '../../Components/FormContainer'
+import CreateTaskForm from "../CreateTaskForm/CreateTaskForm";
+import UpdateTaskForm from "../UpdateTaskForm/UpdateTaskForm";
+import FormContainer from '../FormContainer'
 import Style from './Tasks.module.scss'
 import { useState,useEffect } from "react";
 import axios from 'axios'
-import MessageAlert from "../../Components/Alert/MessageAlert";
-import Confirmation from "../../Components/Alert/Confirmation";
+import MessageAlert from "../Alert/MessageAlert";
+import Confirmation from "../Alert/Confirmation";
+import TaskDetails from "../TaskDetails/TaskDetails";
 
 
 function TaskContainer({mode,initialTask,onClose,onSuccess}) {
@@ -105,15 +106,16 @@ function TaskContainer({mode,initialTask,onClose,onSuccess}) {
 
     return (
         <>
-        {(mode==="create" || mode==="update") && (
+        {(mode==="create" || mode==="update" || mode==="details") && (
         <div className={`${Style['modal']} `}>
             <button className={Style['close-btn']} onClick={()=>{ handleCloseForm();}}>X</button>
             <div className={`flex flex-direction-column ${Style['modal-content']} ${closing ? Style.hide : Style.show}`}>
-                
-                <FormContainer onSubmit={handleSubmit} serverError={error}>
-                    {mode==='create' ? <CreateTaskForm /> : <UpdateTaskForm initialTask={initialTask} />}
-                </FormContainer>
-
+                {
+                    mode==='details'? <TaskDetails task={initialTask} />:
+                    <FormContainer onSubmit={handleSubmit} serverError={error}>
+                        {mode==='create' ? <CreateTaskForm /> : <UpdateTaskForm initialTask={initialTask} />}
+                    </FormContainer>
+                }
             </div>
         </div>)}
         {showAlert && <MessageAlert message={alertMessage} duration={2000} type="success" />}

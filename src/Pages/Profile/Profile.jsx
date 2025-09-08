@@ -13,7 +13,7 @@ function Profile(){
 
     const {user, setUser, loading}= useContext(UserContext); //Destructing
     const navigate=useNavigate();
-
+    
     const handleSubmit=()=>{
         localStorage.removeItem('userId');
         setUser(null);

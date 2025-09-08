@@ -1,10 +1,9 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
+import { FaPlus, FaEdit, FaTrash, FaInfoCircle } from "react-icons/fa";
 import DropDown from '../../Components/DropDown/DropDown';
 import Style from './Tasks.module.scss';
-import TaskContainer from "./TaskContainer";
+import TaskContainer from "../../Components/TaskContainer/TaskContainer";
 import axios from "axios";
-
 
 function Tasks() {
     const [mode, setMode] = useState("create");
@@ -41,7 +40,7 @@ function Tasks() {
         setSelectedTask(null);
     };
 
-    // Update tasks state after creating/updating a task
+    // Update tasks state after creating/updating/delete a task
     const handleTaskSuccess = (task) => {
         if (mode === "create") {
             setTasks(prev => [...prev, task]);
@@ -61,11 +60,14 @@ function Tasks() {
         });
     }, [tasks]);
 
+
+
+
     return (
         <>
             <section className={`row justify-center ${Style.tasks}`}>
                 <div className={`row justify-center ${Style.filter}`}>
-                    <DropDown />
+                    <DropDown  />
                 </div>
 
                 {/* Modal */}
@@ -88,7 +90,8 @@ function Tasks() {
                         <FaPlus color="#c2d5f6" size={24} />
                     </div>
                     {sortedTasks?.map((task, index) => (
-                        <div key={index} className={`row justify-center ${Style.card}`}>
+                        <div key={index} className={`row justify-center ${Style.card}`}
+                        >
                             <h2>{task.title}</h2>
                             <p>{task.description}</p>
                             <time>{new Date(task.dueDate).toLocaleDateString()}</time>
@@ -98,6 +101,7 @@ function Tasks() {
                             >
                                 <FaTrash color="red" size={22} onClick={() => handleOpenModal("delete", task)} />
                                 <FaEdit color="#c2d5f6" size={22} onClick={() => handleOpenModal("update", task)} />
+                                <FaInfoCircle color="black" size={22} onClick={() => handleOpenModal("details", task)} />
                             </div>
                         </div>
                     ))}
