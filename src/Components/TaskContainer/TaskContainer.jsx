@@ -14,7 +14,6 @@ function TaskContainer({mode,initialTask,onClose,onSuccess}) {
     console.log(initialTask);
 
     const [closing, setClosing] = useState(false);
-    
     const [showAlert, setShowAlert]=useState(false);
     const [showConfirm, setShowConfirm]=useState(true);
     const [alertMessage,setAlertMessage] = useState("");  
@@ -54,7 +53,7 @@ function TaskContainer({mode,initialTask,onClose,onSuccess}) {
                     {
                         Title:data.title,
                         Description:data.description,
-                        DueDate:data.duedate,
+                        DueDate:new Date(data.dueDate),
                         IsCompleted:false,
                         UserId:localStorage.getItem('userId')
                     }
@@ -76,8 +75,8 @@ function TaskContainer({mode,initialTask,onClose,onSuccess}) {
                 const res = await axios.put(`https://localhost:7092/api/Tasks/update/${initialTask.id}`, {
                     Title: data.title,
                     Description: data.description,
-                    DueDate: data.duedate,
-                    IsCompleted: data.IsCompleted,
+                    DueDate: new Date(data.dueDate),
+                    isCompleted: data.isCompleted, 
                     UserId: localStorage.getItem('userId')
                 });
                 if (res.data) {
@@ -112,7 +111,13 @@ function TaskContainer({mode,initialTask,onClose,onSuccess}) {
             <div className={`flex flex-direction-column ${Style['modal-content']} ${closing ? Style.hide : Style.show}`}>
                 {
                     mode==='details'? <TaskDetails task={initialTask} />:
-                    <FormContainer onSubmit={handleSubmit} serverError={error}>
+                    <FormContainer onSubmit={handleSubmit} serverError={error}  initialData={{
+    ...initialTask,
+    isCompleted:initialTask?.isCompleted ||false,
+    dueDate: initialTask?.dueDate
+      ? new Date(initialTask.dueDate).toISOString().split('T')[0]
+      : ''
+  }}>
                         {mode==='create' ? <CreateTaskForm /> : <UpdateTaskForm initialTask={initialTask} />}
                     </FormContainer>
                 }
