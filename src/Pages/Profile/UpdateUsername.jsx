@@ -47,6 +47,15 @@ function UpdateUsername(){
  
             const users=JSON.parse(localStorage.getItem("users")||[]);
             const userId=localStorage.getItem('userId');
+            const nameExist=users.find(u=>
+                u.username===newUser.username
+            )
+            
+            if(nameExist){
+                setError('Name already exist');
+                return;
+            }
+
             const updatedUsers=users.map(u=>
                 u.id === userId ? {...u, ...newUser}:u
             );
