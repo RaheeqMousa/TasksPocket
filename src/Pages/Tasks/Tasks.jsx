@@ -59,6 +59,23 @@ function Tasks() {
       }
     } catch (e) {
       console.error(e);
+      let tasksFromStorage = JSON.parse(localStorage.getItem('tasks') || '[]');
+
+      if (!Array.isArray(tasksFromStorage)) {
+        tasksFromStorage = [tasksFromStorage];
+      }
+
+      let userTasks = tasksFromStorage.filter(t =>
+        t.userId === localStorage.getItem('userId')
+      );
+
+      const sorted = [...userTasks].sort(
+        (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
+      );
+
+      console.log(sorted);
+      setTasks(sorted);
+      setFilteredTasks(sorted);
     }
   }, []);
 
@@ -82,6 +99,7 @@ function Tasks() {
   // Update tasks state after creating/updating/delete a task
   const handleTaskSuccess = (task) => {
     if (mode === "create") {
+      console.log(tasks);
       const updated = [...tasks, task].sort(
         (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
       );
@@ -154,12 +172,12 @@ function Tasks() {
             style={borderColor}
             aria-label="Create Task"
           >
-              <FaPlus color="#c2d5f6" size={24} />
+            <FaPlus color="#c2d5f6" size={24} />
           </div>
 
           {filteredTasks?.map((task, index) => (
             <div
-              key={task.id}
+              key={index}
               className={`row justify-center ${Style.card}`}
               style={borderColor}
               onMouseDown={() => handleMouseDown(index)}
@@ -172,29 +190,29 @@ function Tasks() {
               <div className={`row justify-center ${Style["options"]}`}>
                 <button aria-label={`Delete task ${task.title}`} onClick={() => handleOpenModal("delete", task)}>
                   <FaTrash
-                  color="red"
-                  size={22}/>
+                    color="red"
+                    size={22} />
                 </button>
-                
+
                 <button aria-label={`Edit task ${task.title}`} onClick={() => handleOpenModal("update", task)}>
-                <FaEdit
-                  color="#c2d5f6"
-                  size={22}/>
+                  <FaEdit
+                    color="#c2d5f6"
+                    size={22} />
                 </button>
 
                 <button aria-label={`Display details of task ${task.title}`} onClick={() => handleOpenModal("details", task)}>
                   <FaInfoCircle
-                  color="black"
-                  size={22}/>
+                    color="black"
+                    size={22} />
                 </button>
-              
+
                 <input
                   type="checkbox"
                   checked={task.isCompleted}
                   onChange={() => checkTask(task, setTasks, setFilteredTasks)}
                   aria-label={`Mark task ${task.title} as completed`}
                 />
-                
+
               </div>
             </div>
           ))}
@@ -204,26 +222,42 @@ function Tasks() {
   );
 }
 
+
 const checkTask = async (task, setTasks, setFilteredTasks) => {
+  const updatedTask = { ...task, isCompleted: !task.isCompleted };
+
   try {
-    const updatedTask = { ...task, isCompleted: !task.isCompleted };
     const res = await axios.put(
       `https://localhost:7092/api/Tasks/update/${task.id}`,
-      {
-        Title: updatedTask.title,
-        Description: updatedTask.description,
-        DueDate: updatedTask.dueDate,
-        isCompleted: updatedTask.isCompleted,
-        UserId: localStorage.getItem("userId"),
-      }
+      updatedTask
     );
+
     if (res.data) {
       setTasks((prev) => prev.map((t) => (t.id === task.id ? res.data : t)));
-      setFilteredTasks((prev) => prev.map((t) => (t.id === task.id ? res.data : t)));
+      setFilteredTasks((prev) =>
+        prev.map((t) => (t.id === task.id ? res.data : t))
+      );
     }
   } catch (err) {
     console.error(err);
+
+    // Load local tasks safely
+    const localTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+
+    // Update the matching task
+    const updatedTasks = localTasks.map((t) =>
+      t.id === task.id ? { ...t, ...updatedTask } : t
+    );
+
+    // Save back to localStorage
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+
+    // Update state with the new tasks array
+    setTasks(updatedTasks);
+    setFilteredTasks(updatedTasks);
+
   }
 };
+
 
 export default Tasks;

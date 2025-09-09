@@ -41,13 +41,23 @@ function Login(){
             
 
         }catch(er){
-            const message =
-                er.response && er.response.data && er.response.data.message
-                ? er.response.data.message
-                : er.message || "Unexpected error";
+            console.log(er);
 
-            setError(message);
-
+            let persons= JSON.parse(localStorage.getItem('users'))||[];
+            if(!Array.isArray(persons)){
+                persons=[persons];
+            }
+            const user= persons.find((u)=>{ 
+                 return u.username==username && u.password==password 
+            });
+            console.log(user);
+            if(user){
+                localStorage.setItem('userId',user.id);
+                setUser(user);
+                navigate('/user/profile')
+            }else{
+                setError("Invalid Username or password");
+            }
         }finally{
             setLoading(false);
         }

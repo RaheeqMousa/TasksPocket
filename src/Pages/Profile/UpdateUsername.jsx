@@ -36,12 +36,26 @@ function UpdateUsername(){
 
             setUser(newUser)
         }catch(er){
-            const message =
-                er.response && er.response.data && er.response.data.message
-                ? er.response.data.message
-                : er.message || "Unexpected error";
+            // const message =
+            //     er.response && er.response.data && er.response.data.message
+            //     ? er.response.data.message
+            //     : er.message || "Unexpected error";
 
-            setError(message);
+            // setError(message);
+            console.log(er)
+            setError('');
+
+            const users=JSON.parse(localStorage.getItem("users")||[]);
+            const userId=localStorage.getItem('userId');
+            const updatedUsers=users.map(u=>
+                u.id === userId ? {...u, ...newUser}:u
+            );
+            localStorage.setItem("users", JSON.stringify(updatedUsers));
+            const updatedUser = updatedUsers.find(u => u.id === userId);
+            setUser(updatedUser);
+            if(updatedUser){
+                alert("User's username updated successfully.")
+            }
         }
     }
 

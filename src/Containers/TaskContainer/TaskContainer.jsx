@@ -38,27 +38,34 @@ function TaskContainer({mode,initialTask,onClose,onSuccess}) {
     const handleConfirm = async (choice) => {
         setShowConfirm(false);
         if (choice === true && initialTask) {
-            const res = await axios.delete(`https://localhost:7092/api/Tasks/delete/${initialTask.id}`);
-            if (res.status === 200) {
-                if (onSuccess) onSuccess(initialTask.id); // Pass deleted task id
+            try{
+                const res = await axios.delete(`https://localhost:7092/api/Tasks/delete/${initialTask.id}`);
+                if (res.status === 200) {
+                    if (onSuccess) onSuccess(initialTask.id); // Pass deleted task id
+                    handleCloseForm();
+                }
+            }catch(e){
+                console.log(e);
+                let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+                tasks = tasks.filter((task) => task.id !== initialTask.id);
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                if (onSuccess) onSuccess(initialTask.id);
                 handleCloseForm();
             }
         }
     };
 
     const handleSubmit=async (data)=>{
-        console.log(data);
-        console.log("submit");
         try{
             if(mode==="create"){
                 console.log(data);
                 const res=await axios.post('https://localhost:7092/api/Tasks/create',
                     {
-                        Title:data.title,
-                        Description:data.description,
-                        DueDate:new Date(data.dueDate),
-                        IsCompleted:false,
-                        UserId:localStorage.getItem('userId')
+                        title:data.title,
+                        description:data.description,
+                        dueDate:new Date(data.dueDate),
+                        isCompleted:false,
+                        userId:localStorage.getItem('userId')
                     }
                 );
                 if (res.data) {
@@ -76,11 +83,11 @@ function TaskContainer({mode,initialTask,onClose,onSuccess}) {
                 }
             }else{
                 const res = await axios.put(`https://localhost:7092/api/Tasks/update/${initialTask.id}`, {
-                    Title: data.title,
-                    Description: data.description,
-                    DueDate: new Date(data.dueDate),
+                    title: data.title,
+                    description: data.description,
+                    dueDate: new Date(data.dueDate),
                     isCompleted: data.isCompleted, 
-                    UserId: localStorage.getItem('userId')
+                    userId: localStorage.getItem('userId')
                 });
                 if (res.data) {
                     setAlertMessage("Task has been updated successfully");
@@ -97,12 +104,82 @@ function TaskContainer({mode,initialTask,onClose,onSuccess}) {
                 }
             }
         }catch(er ){
-            const message =
-                er.response && er.response.data && er.response.data.message
-                ? er.response.data.message
-                : er.message || "Unexpected error";
+            // const message =
+            //     er.response && er.response.data && er.response.data.message
+            //     ? er.response.data.message
+            //     : er.message || "Unexpected error";
 
-            setError(message);
+            console.log(er)
+            setError('');
+
+            if (mode === "create") {
+                const newData = {
+                    id:`task-${Date.now()}`,
+                    title: data.title,
+                    description: data.description,
+                    dueDate: new Date(data.dueDate),
+                    isCompleted: false,
+                    userId: localStorage.getItem('userId')
+                };
+
+                let localTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+                if (!Array.isArray(localTasks)) {
+                    localTasks = [localTasks];
+                }
+                localTasks.push(newData);
+                localStorage.setItem('tasks', JSON.stringify(localTasks));
+
+                
+                setAlertMessage("Task has been created successfully");
+                setShowAlert(true);
+
+                if (onSuccess) {
+                    setTimeout(() => {
+                        onSuccess(newData);
+                        handleCloseForm();
+                        setShowAlert(false);
+                    }, 2000);
+                }
+            }
+            else{
+                const newData = {
+    id: data.id, // keep the same id for updating
+    title: data.title,
+    description: data.description,
+    dueDate: new Date(data.dueDate),
+    isCompleted: data.isCompleted,
+    userId: localStorage.getItem('userId')
+};
+
+// Load tasks safely
+const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+
+// Update the matching task
+const updatedTasks = tasks.map(t =>
+    t.id === data.id ? { ...t, ...newData } : t
+);
+
+// Save back to localStorage
+localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+
+// Find updated task
+const updatedTask = updatedTasks.find(t => t.id === data.id);
+console.log(updatedTask);
+
+// Success message
+setAlertMessage("Task has been updated successfully");
+setShowAlert(true);
+
+if (onSuccess) {
+    setTimeout(() => {
+        onSuccess(updatedTask);
+        handleCloseForm();
+        setShowAlert(false);
+    }, 2000);
+}
+            }
+
+            
         }
     }
 

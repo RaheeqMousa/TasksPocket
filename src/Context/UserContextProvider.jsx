@@ -22,7 +22,9 @@ function UserContextProvider({children}){
             setUser(await res.data);
         }catch(e){
             console.log(e);
-            setUser(null);
+            const users=JSON.parse(localStorage.getItem('users')||[]);
+            const searchedUser=users.find(u=> u.id===token);
+            setUser(searchedUser);
         
         }finally{
             setLoading(false);

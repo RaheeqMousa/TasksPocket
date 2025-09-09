@@ -28,12 +28,16 @@ function ProfileInfo(){
     const handleConfirmClose = async (choice) => {
         setShowConfirm(false);
         if (choice === true) {
-            const res=await axios.delete(`https://localhost:7092/api/Users/delete/${localStorage.getItem('userId')}`);
-            if(res.status===200){
-                setShowAlert(true);
+            try{
+                const res=await axios.delete(`https://localhost:7092/api/Users/delete/${localStorage.getItem('userId')}`);
+                if(res.status===200){
+                    setShowAlert(true);
+                }
+                localStorage.removeItem("userId");
+                navigate("/auth/login", { state: { alert: "Your account has been deleted successfully" } });
+            }catch(e){
+                console.log(e);
             }
-            localStorage.removeItem("userId");
-            navigate("/auth/login", { state: { alert: "Your account has been deleted successfully" } });
         }
     };
     
