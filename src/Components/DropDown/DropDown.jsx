@@ -46,18 +46,24 @@ export default function DropDown({ items=[], Actions=[] }) {
 
 
     return (
-        <div className="flex flex-direction-column" style={styles.container}>
+        <div className="flex flex-direction-column" style={styles.container} >
             <button 
                 onClick={toggleDropDown}  className='row'
-                style={styles.btn}>
-                <span><IoMdSettings size={24} color='black'/></span>
+                aria-haspopup="menu"
+                aria-expanded={isOpen}
+                aria-controls='dropdown-menu'
+                style={styles.btn}
+                aria-label='DropDown-btn'>
+                <IoMdSettings size={24} color='black'/>
             </button>
 
             {isOpen && (
-                <ul style={styles.list}>
+                <ul style={styles.list} role='menu' id='dropdown-menu'>
                     {items.length > 0 ? (
                         items.map((item, index) => (
                             <li 
+                                role='menuitem'
+                                tabIndex={0}
                                 key={index} 
                                 style={item === "Delete Account" ? {...styles.item, color:"white", backgroundColor:"red"}: styles.item}
                                 onClick={() => {

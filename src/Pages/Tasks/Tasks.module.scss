@@ -45,6 +45,9 @@
         margin-top: 30px;
         gap:10px;
 
+        button{
+            background: none;
+        }
         @media screen and (max-width: 1000px) {
             align-self: center;
         }

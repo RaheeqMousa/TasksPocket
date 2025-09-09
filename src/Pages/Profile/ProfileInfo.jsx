@@ -41,7 +41,7 @@ function ProfileInfo(){
         <div className={`row flex-direction-column ${Style['profile-info']}`}>
             <div className={`row ${Style['settings']}`}>
                 <div className={`row ${Style['select-wrapper']}`}>
-                    <DropDown items={["Delete Account"]} Actions={[handleDelete]} />
+                    <DropDown items={["Delete Account"]} Actions={[handleDelete]} aria-label="Account settings" />
                 </div>
             </div>
             

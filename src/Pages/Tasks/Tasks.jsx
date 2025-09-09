@@ -128,6 +128,7 @@ function Tasks() {
           <DropDown
             items={["All", "Completed", "Not completed"]}
             Actions={[getAllTasks, getCompletedTasks, getNonCompletedTasks]}
+            aria-label="Filter tasks"
           />
         </div>
 
@@ -151,8 +152,9 @@ function Tasks() {
             className={`row justify-center ${Style.create} ${Style.card}`}
             onClick={() => handleOpenModal("create")}
             style={borderColor}
+            aria-label="Create Task"
           >
-            <FaPlus color="#c2d5f6" size={24} />
+              <FaPlus color="#c2d5f6" size={24} />
           </div>
 
           {filteredTasks?.map((task, index) => (
@@ -168,26 +170,31 @@ function Tasks() {
               <time>{new Date(task.dueDate).toLocaleDateString()}</time>
 
               <div className={`row justify-center ${Style["options"]}`}>
-                <FaTrash
+                <button aria-label={`Delete task ${task.title}`} onClick={() => handleOpenModal("delete", task)}>
+                  <FaTrash
                   color="red"
-                  size={22}
-                  onClick={() => handleOpenModal("delete", task)}
-                />
+                  size={22}/>
+                </button>
+                
+                <button aria-label={`Edit task ${task.title}`} onClick={() => handleOpenModal("update", task)}>
                 <FaEdit
                   color="#c2d5f6"
-                  size={22}
-                  onClick={() => handleOpenModal("update", task)}
-                />
-                <FaInfoCircle
+                  size={22}/>
+                </button>
+
+                <button aria-label={`Display details of task ${task.title}`} onClick={() => handleOpenModal("details", task)}>
+                  <FaInfoCircle
                   color="black"
-                  size={22}
-                  onClick={() => handleOpenModal("details", task)}
-                />
+                  size={22}/>
+                </button>
+              
                 <input
                   type="checkbox"
                   checked={task.isCompleted}
                   onChange={() => checkTask(task, setTasks, setFilteredTasks)}
+                  aria-label={`Mark task ${task.title} as completed`}
                 />
+                
               </div>
             </div>
           ))}
