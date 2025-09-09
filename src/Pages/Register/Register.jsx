@@ -6,12 +6,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 
-function Register(){
-    const [serverError,setServerError]=useState("");
-    const navigate=useNavigate();
+function Register() {
+    const [serverError, setServerError] = useState("");
+    const navigate = useNavigate();
 
-    const registerSubmit=async (data)=>{
-        const {username,email,password}=data;
+    const registerSubmit = async (data) => {
+        const { username, email, password } = data;
 
         const newUser = {
             username: username,
@@ -24,7 +24,7 @@ function Register(){
                 newUser,
                 {
                     headers: {
-                    "Content-Type": "application/json"
+                        "Content-Type": "application/json"
                     }
                 }
             )
@@ -39,24 +39,34 @@ function Register(){
             console.error("Error creating user:", er);
             setServerError("");
 
-            const fallbackId= `local-${Date.now()}`
-            const persons=JSON.parse(localStorage.getItem('users') || '[]')
-            persons.push({...newUser,id:fallbackId});
-            localStorage.setItem("users",JSON.stringify(persons));
-            localStorage.setItem("userId",fallbackId);
-            navigate('/user/profile');
+            const fallbackId = `local-${Date.now()}`;
+            const users = JSON.parse(localStorage.getItem("users") || "[]");
+
+            if (users.some((u) => u.username === newUser.username)) {
+                setServerError("Username already taken");
+                return;
+            }
+
+            const newLocalUser = { ...newUser, id: fallbackId };
+            users.push(newLocalUser);
+            localStorage.setItem("users", JSON.stringify(users));
+            localStorage.setItem("userId", fallbackId);
+
+            if (users.some((u) => u.id === fallbackId)) {
+                navigate("/user/profile");
+            }
         }
     }
 
-    return(
+    return (
         <div className={`row flex-direction-column ${Style['auth-page']}`}>
             <section className={`flex flex-direction-column ${Style['form-section']}`}>
                 <h2>SignUp</h2>
                 <FormContainer onSubmit={registerSubmit} serverError={serverError} >
-                    <RegisterForm/>
+                    <RegisterForm />
                 </FormContainer>
             </section>
-        </div>        
+        </div>
     );
 }
 export default Register;

@@ -78,6 +78,7 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
 
                     }
                 }
+                
             } else {
                 const res = await axios.put(`https://localhost:7092/api/Tasks/update/${initialTask.id}`, {
                     title: data.title,
