@@ -12,45 +12,43 @@ function Tasks() {
   const [tasks, setTasks] = useState([]);
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [theme, setTheme] = useState(
-    localStorage.getItem("themeColor")
-      ? localStorage.getItem("themeColor")
-      : "#c2d5f6"
+    localStorage.getItem("themeColor") || "#c2d5f6"
   );
   const draggedItem = useRef(null);
 
-  const handleMouseDown = (index) => {
+  // Drag handlers
+  const handleMouseDown = useCallback((index) => {
     draggedItem.current = index;
-  };
+  }, []);
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     draggedItem.current = null;
-  };
+  }, []);
 
-  const handleMove = (index) => {
-    if (draggedItem.current === null) return;
+  const handleMove = useCallback(
+    (index) => {
+      if (draggedItem.current === null) return;
 
-    const newItems = [...filteredTasks];
-    const dragged = newItems[draggedItem.current];
+      const newItems = [...filteredTasks];
+      const dragged = newItems[draggedItem.current];
 
-    // remove and reinsert
-    newItems.splice(draggedItem.current, 1);
-    newItems.splice(index, 0, dragged);
+      newItems.splice(draggedItem.current, 1);
+      newItems.splice(index, 0, dragged);
 
-    setFilteredTasks(newItems);
-    setTasks(newItems); // keep main state in sync
-    draggedItem.current = index;
-  };
+      setFilteredTasks(newItems);
+      setTasks(newItems);
+      draggedItem.current = index;
+    },
+    [filteredTasks]
+  );
 
-  // Fetch tasks for the current user
+  // Fetch tasks
   const fetchTasks = useCallback(async () => {
     try {
       const res = await axios.get(
-        `https://localhost:7092/api/Tasks/user/${localStorage.getItem(
-          "userId"
-        )}`
+        `https://localhost:7092/api/Tasks/user/${localStorage.getItem("userId")}`
       );
       if (res.data) {
-        // sort once on fetch
         const sorted = [...res.data].sort(
           (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
         );
@@ -59,21 +57,17 @@ function Tasks() {
       }
     } catch (e) {
       console.error(e);
-      let tasksFromStorage = JSON.parse(localStorage.getItem('tasks') || '[]');
+      let tasksFromStorage = JSON.parse(localStorage.getItem("tasks") || "[]");
+      if (!Array.isArray(tasksFromStorage)) tasksFromStorage = [tasksFromStorage];
 
-      if (!Array.isArray(tasksFromStorage)) {
-        tasksFromStorage = [tasksFromStorage];
-      }
-
-      let userTasks = tasksFromStorage.filter(t =>
-        t.userId === localStorage.getItem('userId')
+      const userTasks = tasksFromStorage.filter(
+        (t) => t.userId === localStorage.getItem("userId")
       );
 
       const sorted = [...userTasks].sort(
         (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
       );
 
-      console.log(sorted);
       setTasks(sorted);
       setFilteredTasks(sorted);
     }
@@ -83,145 +77,141 @@ function Tasks() {
     fetchTasks();
   }, [fetchTasks]);
 
-  // Open modal for create or update
-  const handleOpenModal = (mode, task = null) => {
+  // Modal handlers
+  const handleOpenModal = useCallback((mode, task = null) => {
     setMode(mode);
     setSelectedTask(task);
     setDisplayModal(true);
-  };
+  }, []);
 
-  // Close modal
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setDisplayModal(false);
     setSelectedTask(null);
-  };
+  }, []);
 
-  // Update tasks state after creating/updating/delete a task
-  const handleTaskSuccess = (task) => {
-    if (mode === "create") {
-      console.log(tasks);
-      const updated = [...tasks, task].sort(
-        (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
-      );
-      setTasks(updated);
-      setFilteredTasks(updated);
-    } else if (mode === "delete") {
-      const updated = tasks.filter((t) => t.id !== task);
-      setTasks(updated);
-      setFilteredTasks(updated);
-    } else {
-      const updated = tasks.map((t) => (t.id === task.id ? task : t));
-      setTasks(updated);
-      setFilteredTasks(updated);
-    }
-    handleCloseModal();
-  };
+  // Task updates
+  const handleTaskSuccess = useCallback(
+    (task) => {
+      if (mode === "create") {
+        const updated = [...tasks, task].sort(
+          (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
+        );
+        setTasks(updated);
+        setFilteredTasks(updated);
+      } else if (mode === "delete") {
+        const updated = tasks.filter((t) => t.id !== task);
+        setTasks(updated);
+        setFilteredTasks(updated);
+      } else {
+        const updated = tasks.map((t) => (t.id === task.id ? task : t));
+        setTasks(updated);
+        setFilteredTasks(updated);
+      }
+      handleCloseModal();
+    },
+    [mode, tasks, handleCloseModal]
+  );
 
-  const getCompletedTasks = () => {
-    setFilteredTasks(tasks.filter((t) => t.isCompleted === true));
-  };
+  // Filter actions
+  const getCompletedTasks = useCallback(() => {
+    setFilteredTasks(tasks.filter((t) => t.isCompleted));
+  }, [tasks]);
 
-  const getNonCompletedTasks = () => {
-    setFilteredTasks(tasks.filter((t) => t.isCompleted === false));
-  };
+  const getNonCompletedTasks = useCallback(() => {
+    setFilteredTasks(tasks.filter((t) => !t.isCompleted));
+  }, [tasks]);
 
-  const getAllTasks = () => {
+  const getAllTasks = useCallback(() => {
     setFilteredTasks(tasks);
-  };
+  }, [tasks]);
 
   const setCardTheme = (color) => {
     setTheme(color);
     localStorage.setItem("themeColor", color);
   };
 
-  const borderColor = {
-    border: `4px solid ${theme}`,
-  };
+  const borderColor ={ border: `4px solid ${theme}` }
 
   return (
-    <>
-      <section className={`row justify-center  ${Style.tasks} container`}>
-        <div className={`row ${Style.filter}`}>
-          <input type="color" onChange={(e) => setCardTheme(e.target.value)} />
-          <DropDown
-            items={["All", "Completed", "Not completed"]}
-            Actions={[getAllTasks, getCompletedTasks, getNonCompletedTasks]}
-            aria-label="Filter tasks"
-          />
-        </div>
+    <section className={`row justify-center ${Style.tasks} container`}>
+      <div className={`row ${Style.filter}`}>
+        <input type="color" onChange={(e) => setCardTheme(e.target.value)} />
+        <DropDown
+          items={["All", "Completed", "Not completed"]}
+          Actions={[getAllTasks, getCompletedTasks, getNonCompletedTasks]}
+          aria-label="Filter tasks"
+        />
+      </div>
 
-        {/* Modal */}
-        {displayModal && (
-          <TaskContainer
-            mode={mode}
-            initialTask={selectedTask}
-            onClose={handleCloseModal}
-            onSuccess={handleTaskSuccess}
-          />
-        )}
+      {/* Modal */}
+      {displayModal && (
+        <TaskContainer
+          mode={mode}
+          initialTask={selectedTask}
+          onClose={handleCloseModal}
+          onSuccess={handleTaskSuccess}
+        />
+      )}
 
-        {/* Task list */}
+      {/* Task list */}
+      <div className={`row ${Style["tasks-list"]}`} onMouseUp={handleMouseUp}>
+        {/* Create button */}
         <div
-          className={`row ${Style["tasks-list"]}`}
-          onMouseUp={handleMouseUp}
+          className={`row justify-center ${Style.create} ${Style.card}`}
+          onClick={() => handleOpenModal("create")}
+          style={borderColor}
+          aria-label="Create Task"
         >
-          {/* Create button */}
-          <div
-            className={`row justify-center ${Style.create} ${Style.card}`}
-            onClick={() => handleOpenModal("create")}
-            style={borderColor}
-            aria-label="Create Task"
-          >
-            <FaPlus color="#c2d5f6" size={24} />
-          </div>
-
-          {filteredTasks?.map((task, index) => (
-            <div
-              key={index}
-              className={`row justify-center ${Style.card}`}
-              style={borderColor}
-              onMouseDown={() => handleMouseDown(index)}
-              onMouseMove={() => handleMove(index)}
-            >
-              <h2>{task.title}</h2>
-              <p>{task.description}</p>
-              <time>{new Date(task.dueDate).toLocaleDateString()}</time>
-
-              <div className={`row justify-center ${Style["options"]}`}>
-                <button aria-label={`Delete task ${task.title}`} onClick={() => handleOpenModal("delete", task)}>
-                  <FaTrash
-                    color="red"
-                    size={22} />
-                </button>
-
-                <button aria-label={`Edit task ${task.title}`} onClick={() => handleOpenModal("update", task)}>
-                  <FaEdit
-                    color="#c2d5f6"
-                    size={22} />
-                </button>
-
-                <button aria-label={`Display details of task ${task.title}`} onClick={() => handleOpenModal("details", task)}>
-                  <FaInfoCircle
-                    color="black"
-                    size={22} />
-                </button>
-
-                <input
-                  type="checkbox"
-                  checked={task.isCompleted}
-                  onChange={() => checkTask(task, setTasks, setFilteredTasks)}
-                  aria-label={`Mark task ${task.title} as completed`}
-                />
-
-              </div>
-            </div>
-          ))}
+          <FaPlus color="#c2d5f6" size={24} />
         </div>
-      </section>
-    </>
+
+        {filteredTasks?.map((task, index) => (
+          <div
+            key={task.id} // Use task id instead of index
+            className={`row justify-center ${Style.card}`}
+            style={borderColor}
+            onMouseDown={() => handleMouseDown(index)}
+            onMouseMove={() => handleMove(index)}
+          >
+            <h2>{task.title}</h2>
+            <p>{task.description}</p>
+            <time>{new Date(task.dueDate).toLocaleDateString()}</time>
+
+            <div className={`row justify-center ${Style["options"]}`}>
+              <button
+                aria-label={`Delete task ${task.title}`}
+                onClick={() => handleOpenModal("delete", task)}
+              >
+                <FaTrash color="red" size={22} />
+              </button>
+
+              <button
+                aria-label={`Edit task ${task.title}`}
+                onClick={() => handleOpenModal("update", task)}
+              >
+                <FaEdit color="#c2d5f6" size={22} />
+              </button>
+
+              <button
+                aria-label={`Display details of task ${task.title}`}
+                onClick={() => handleOpenModal("details", task)}
+              >
+                <FaInfoCircle color="black" size={22} />
+              </button>
+
+              <input
+                type="checkbox"
+                checked={task.isCompleted}
+                onChange={() => checkTask(task, setTasks, setFilteredTasks)}
+                aria-label={`Mark task ${task.title} as completed`}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
-
 
 const checkTask = async (task, setTasks, setFilteredTasks) => {
   const updatedTask = { ...task, isCompleted: !task.isCompleted };
@@ -240,24 +230,14 @@ const checkTask = async (task, setTasks, setFilteredTasks) => {
     }
   } catch (err) {
     console.error(err);
-
-    // Load local tasks safely
     const localTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-
-    // Update the matching task
     const updatedTasks = localTasks.map((t) =>
       t.id === task.id ? { ...t, ...updatedTask } : t
     );
-
-    // Save back to localStorage
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
-
-    // Update state with the new tasks array
     setTasks(updatedTasks);
     setFilteredTasks(updatedTasks);
-
   }
 };
-
 
 export default Tasks;
