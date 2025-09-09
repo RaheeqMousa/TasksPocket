@@ -1,4 +1,4 @@
-import FormContainer from "../../Components/FormContainer";
+import FormContainer from "../../Containers/FormContainer";
 import LoginForm from "../../Components/LoginForm/LoginForm";
 import Style from '../../Styles/auth.module.css'
 import { useNavigate, useLocation } from "react-router-dom";
@@ -47,6 +47,7 @@ function Login(){
                 : er.message || "Unexpected error";
 
             setError(message);
+
         }finally{
             setLoading(false);
         }

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { FaPlus, FaEdit, FaTrash, FaInfoCircle } from "react-icons/fa";
 import DropDown from "../../Components/DropDown/DropDown";
 import Style from "./Tasks.module.scss";
-import TaskContainer from "../../Components/TaskContainer/TaskContainer";
+import TaskContainer from "../../Containers/TaskContainer/TaskContainer";
 import axios from "axios";
 
 function Tasks() {
@@ -122,7 +122,7 @@ function Tasks() {
 
   return (
     <>
-      <section className={`row justify-center ${Style.tasks}`}>
+      <section className={`row justify-center  ${Style.tasks} container`}>
         <div className={`row ${Style.filter}`}>
           <input type="color" onChange={(e) => setCardTheme(e.target.value)} />
           <DropDown
@@ -186,7 +186,7 @@ function Tasks() {
                 <input
                   type="checkbox"
                   checked={task.isCompleted}
-                  onChange={() => checkTask(task, setTasks)}
+                  onChange={() => checkTask(task, setTasks, setFilteredTasks)}
                 />
               </div>
             </div>
@@ -197,7 +197,7 @@ function Tasks() {
   );
 }
 
-const checkTask = async (task, setTasks) => {
+const checkTask = async (task, setTasks, setFilteredTasks) => {
   try {
     const updatedTask = { ...task, isCompleted: !task.isCompleted };
     const res = await axios.put(
@@ -206,12 +206,13 @@ const checkTask = async (task, setTasks) => {
         Title: updatedTask.title,
         Description: updatedTask.description,
         DueDate: updatedTask.dueDate,
-        IsCompleted: updatedTask.isCompleted,
+        isCompleted: updatedTask.isCompleted,
         UserId: localStorage.getItem("userId"),
       }
     );
     if (res.data) {
       setTasks((prev) => prev.map((t) => (t.id === task.id ? res.data : t)));
+      setFilteredTasks((prev) => prev.map((t) => (t.id === task.id ? res.data : t)));
     }
   } catch (err) {
     console.error(err);

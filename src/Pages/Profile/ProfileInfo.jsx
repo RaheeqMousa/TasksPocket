@@ -13,6 +13,7 @@ function ProfileInfo(){
     const [showConfirm, setShowConfirm] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
 
+
     const {user, loading}= useContext(UserContext); //Destructing
     const navigate =useNavigate();
 

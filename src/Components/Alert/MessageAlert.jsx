@@ -35,10 +35,14 @@ function MessageAlert({ message, type = "info", duration = 5000 }) {
                 color: textColors[type] || "black",
             }}
             className={`${Style.modal}`}
+            role="modal"
+            aria-label="Message Alert"
+            aria-describedby='alert-message'
+            aria-modal='true'
         >   
-        <button className={Style['close-btn']} onClick={() => { isVisible(false); }}>X</button>
+        <button className={Style['close-btn']} onClick={() => { isVisible(false); }} aria-label="Close modal" >X</button>
             <div className={`row ${Style['modal-content']} ${visible ? Style.show : Style.hide}`}>    
-                <p>{message}</p>
+                <p id="alert-message">{message}</p>
             </div>
         </div>
 

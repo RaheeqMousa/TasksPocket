@@ -23,10 +23,12 @@ function Confirmation({message,onClose }) {
     <div
       style={style}
       className={`${Style.modal}`}
+      aria-label="Confirmation Modal" aria-describedby='confirmation-alert-message' role="dialog" aria-modal="true"
     >
-      <button className={Style['close-btn']} onClick={()=>{ handleClose(false);}}>X</button>
-        <div className={`row ${Style['modal-content']} ${closing ? Style.hide : Style.show}`}>            
-            <p>{message}</p>
+      <button className={Style['close-btn']} onClick={()=>{ handleClose(false);}} aria-label="Close modal">X</button>
+
+        <div className={`row ${Style['modal-content']} ${closing ? Style.hide : Style.show}`}  >            
+            <p id="confirmation-alert-message">{message}</p>
             <div className={`row ${Style.actions}`}>
                 <button className={Style['cancel']} onClick={() => { handleClose(false);}}>
                 Cancel

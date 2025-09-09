@@ -1,8 +1,8 @@
-.carousel-wrapper{
+.carousel{
   justify-content: center;
   width: 100%;
 }
-.carousel {
+.slide {
   position: relative;
   width: 100%;
   border-radius: 10px;
@@ -14,7 +14,11 @@
   width: 800px;
 }
 
-.carousel img{
+.slide button{
+  background: transparent;
+}
+
+.slide img{
   height: 100%;
   width: 100%;
   object-fit: cover;
@@ -32,3 +36,9 @@
 }
 
 
+@media screen and (max-width: 500px) {
+  .slide{
+    height: 250px;
+    width: 100%;
+  }
+}

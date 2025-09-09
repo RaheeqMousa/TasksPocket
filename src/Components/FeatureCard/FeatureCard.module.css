@@ -1,7 +1,15 @@
 .features{
-   width: 75%;
+   width: 100%;
    justify-self: center;
    margin: 40px 0px;
+}
+
+.features h2{
+    font-size: 28px;
+}
+
+.features .feature-list{
+    width: 100%;
 }
 
 .features .feature{
@@ -68,10 +76,14 @@
 }
 
 @media (max-width: 768px){
-    .features .row{
+    section.features{
+        justify-content: center;
+        gap:30px;
+    }
+
+    .features .feature-list{
         justify-content: center;
         gap:20px;
     }
-
 
 }

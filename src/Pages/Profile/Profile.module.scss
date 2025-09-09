@@ -46,6 +46,18 @@ aside{
     border-bottom-right-radius: 20px;
     border-top-right-radius: 20px;
 
+    &.opened{
+        width: 100%;
+        @media screen and (max-width:600px) {
+            width: 80%;
+        }
+    }
+
+    &.closed{
+        width: 40px;
+        overflow: hidden;
+    }
+
     .link{
         padding: 20px 0px;
         justify-content: flex-start;
@@ -66,7 +78,7 @@ aside{
         color: #36474F;
         font-weight: bold;
         margin-top: 50px;
-        width: 150px;
+        width: 120px;
         height: 30px;
         border-radius: 20px;
         cursor: pointer;

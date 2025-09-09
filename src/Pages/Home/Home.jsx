@@ -22,16 +22,16 @@ function Home(){
     ];
         
    return( 
-        <>
+        <div className="container">
             <Carousel images={images} />
             <FeatureCard features={features} />
-            <div className={`row ${Style.goal}`}>
+            <section className={`row justify-center ${Style.goal}`}>
                 <img src={TaskImg} width={500} height={300} alt="Tasks board" title="Tasks board"/>
                 <span>
                     Our system is designed to solve your problems of disorganization and distraction in a comfortable and safe way.                
                 </span>
-            </div>
-        </>
+            </section>
+        </div>
     );
    
 }

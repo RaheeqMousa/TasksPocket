@@ -1,4 +1,4 @@
-import Style from '../TaskContainer/Tasks.module.scss'
+import Style from '../../Containers/TaskContainer/Tasks.module.scss'
 
 function TaskDetails({task}){
     return(

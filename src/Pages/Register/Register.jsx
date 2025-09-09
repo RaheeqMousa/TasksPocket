@@ -1,5 +1,5 @@
 
-import FormContainer from "../../Components/FormContainer";
+import FormContainer from "../../Containers/FormContainer";
 import RegisterForm from "../../Components/RegisterForm/RegisterForm";
 import Style from '../../Styles/auth.module.css'
 import { useState } from "react";
@@ -43,6 +43,7 @@ function Register(){
                 : er.message || "Unexpected error";
 
             setServerError(message);
+            
         }
     }
 
@@ -50,7 +51,7 @@ function Register(){
         <div className={`row flex-direction-column ${Style['auth-page']}`}>
             <section className={`flex flex-direction-column ${Style['form-section']}`}>
                 <h2>SignUp</h2>
-                <FormContainer onSubmit={registerSubmit} serverError={serverError}>
+                <FormContainer onSubmit={registerSubmit} serverError={serverError} >
                     <RegisterForm/>
                 </FormContainer>
             </section>

@@ -1,12 +1,12 @@
-import CreateTaskForm from "../CreateTaskForm/CreateTaskForm";
-import UpdateTaskForm from "../UpdateTaskForm/UpdateTaskForm";
+import CreateTaskForm from "../../Components/CreateTaskForm/CreateTaskForm";
+import UpdateTaskForm from "../../Components/UpdateTaskForm/UpdateTaskForm";
 import FormContainer from '../FormContainer'
 import Style from './Tasks.module.scss'
 import { useState,useEffect } from "react";
 import axios from 'axios'
-import MessageAlert from "../Alert/MessageAlert";
-import Confirmation from "../Alert/Confirmation";
-import TaskDetails from "../TaskDetails/TaskDetails";
+import MessageAlert from "../../Components/Alert/MessageAlert";
+import Confirmation from "../../Components/Alert/Confirmation";
+import TaskDetails from "../../Components/TaskDetails/TaskDetails";
 
 
 function TaskContainer({mode,initialTask,onClose,onSuccess}) {
@@ -47,8 +47,11 @@ function TaskContainer({mode,initialTask,onClose,onSuccess}) {
     };
 
     const handleSubmit=async (data)=>{
+        console.log(data);
+        console.log("submit");
         try{
             if(mode==="create"){
+                console.log(data);
                 const res=await axios.post('https://localhost:7092/api/Tasks/create',
                     {
                         Title:data.title,
@@ -103,12 +106,19 @@ function TaskContainer({mode,initialTask,onClose,onSuccess}) {
         }
     }
 
+    const modalTitles = {
+        create: "Create Task",
+        update: "Update Task",
+        details: "Task Details"
+    };
+
     return (
         <>
         {(mode==="create" || mode==="update" || mode==="details") && (
-        <div className={`${Style['modal']} `}>
-            <button className={Style['close-btn']} onClick={()=>{ handleCloseForm();}}>X</button>
+        <div className={`${Style['modal']} `} role="dialog" aria-label={`${mode} task modal`} aria-modal="true" aria-describedby={`modal-title`} >
+            <button className={Style['close-btn']} onClick={()=>{ handleCloseForm();}} aria-label="Close modal">X</button>
             <div className={`flex flex-direction-column ${Style['modal-content']} ${closing ? Style.hide : Style.show}`}>
+                 <h3 id="modal-title">{modalTitles[mode]}</h3>
                 {
                     mode==='details'? <TaskDetails task={initialTask} />:
                     <FormContainer onSubmit={handleSubmit} serverError={error}  initialData={{

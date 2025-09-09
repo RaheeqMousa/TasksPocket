@@ -1,5 +1,5 @@
 import Style from './Profile.module.scss'
-import FormContainer from '../../Components/FormContainer';
+import FormContainer from '../../Containers/FormContainer';
 import UpdateUsernameForm from '../../Components/UpdateUsername/UpdateUsernameForm'
 import { UserContext } from '../../Context/UserContext';
 import UserContextProvider from '../../Context/userContextProvider';
@@ -54,7 +54,7 @@ function UpdateUsername(){
         <div className={`row flex-direction-column justify-center`}>
             <section className={`flex flex-direction-column `}>   
                 <h2>Update Username</h2>  
-                    <FormContainer onSubmit={handleSubmit} serverError={error}>
+                    <FormContainer onSubmit={handleSubmit} serverError={error} initialData={user}>
                         <UpdateUsernameForm />
                     </FormContainer>
             </section>

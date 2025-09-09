@@ -15,15 +15,19 @@ function Carousel({images}){
     }
 
     return (
-        <div className={`flex align-center ${Style['carousel-wrapper']}`}>
-            <div className={Style['carousel']}>
-                <img src={images[current]} alt={`slide ${current}`} title={`slide ${current}`} height={300} width={500}/>
+        <section className={`flex align-center ${Style['carousel']}`}
+            role="region" aria-roledescription="carousel" aria-label="Website Features"
+             >
+            <div className={Style['slide']} role="group" aria-roledescription={`slide ${current+1}`} aria-label={`Slide ${current+1} of ${images.length}`}>
+                <img src={images[current]} alt={`slide ${current}`} title={`slide ${current}`} 
+                    height={300} width={500}
+                    />
                 <div className={`row ${Style.controls}`}>
-                    <BsFillArrowLeftSquareFill color="white" size={30} onClick={prev} />         
-                    <BsFillArrowRightSquareFill color="white" size={30} onClick={next} />
+                    <button onClick={prev} aria-label="Previous slide"><BsFillArrowLeftSquareFill color="white" size={30}  /></button>     
+                    <button onClick={next} aria-label="Next slide"><BsFillArrowRightSquareFill color="white" size={30}  /></button>
                 </div>
             </div>     
-        </div>
+        </section>
     );
 }
 export default Carousel;

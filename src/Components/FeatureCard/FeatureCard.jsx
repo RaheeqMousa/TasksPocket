@@ -4,15 +4,18 @@ function FeatureCard({features}){
 
         
    return(
-    <section className={`row  ${Style.features}`}>
+    <section className={`row flex-direction-column  ${Style.features}`} aria-labelledby='features-titles'>
+        <h2 id='features-titles'>Features</h2>
+        <div className={`row ${Style['feature-list']}`}>
         {
             features.map((f, i)=>(
                 <div key={i} className={`row  ${Style.feature}`}>
-                    {f.icon}
-                    <span>{f.desc}</span>
+                    <span aria-hidden="true">{f.icon}</span>
+                    <h3>{f.desc}</h3>
                 </div>   
             ))
         }
+        </div>
     </section>
    );
 }

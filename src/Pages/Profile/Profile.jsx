@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {UserContext} from "../../Context/UserContext";
 import Loader from "../../Components/Loader/Loader";
 import Style from './Profile.module.scss'
@@ -8,10 +8,20 @@ import { MdModeEditOutline } from "react-icons/md";
 import { MdLockReset } from "react-icons/md";
 import { BiLogOut } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import { BiCollapse } from 'react-icons/bi';
+import { BsArrowsFullscreen } from 'react-icons/bs';
 
 function Profile(){
 
     const {user, setUser, loading}= useContext(UserContext); //Destructing
+    const [showSidebar,setShowSidebar]= useState(true);
+
+    const toggle=()=>{
+        setShowSidebar(!showSidebar);
+    }
+
+
+
     const navigate=useNavigate();
     
     const handleSubmit=()=>{
@@ -25,7 +35,10 @@ function Profile(){
     
     return(
         <section className={`${Style['profile-layout']}`}>
-            <aside className="flex flex-direction-column">
+            <aside className={`flex flex-direction-column ${showSidebar? Style.opened: Style.closed}`} >
+                {showSidebar? <BiCollapse size={20} color="#8398A0" onClick={toggle} />:
+                    <BsArrowsFullscreen size={20} color="#8398A0" onClick={toggle} />
+                }
                 <div className={`row ${Style.link}`}>
                     <FaInfo size={22} color="#8398A0"/>
                     <Link to="/user/profile/ProfileInfo">Profile Info</Link>
