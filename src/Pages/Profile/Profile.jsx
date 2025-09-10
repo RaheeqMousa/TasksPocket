@@ -5,8 +5,6 @@ import Style from './Profile.module.scss'
 import { Link, Outlet } from "react-router-dom";
 import { FaInfo } from "react-icons/fa";
 import { MdModeEditOutline } from "react-icons/md";
-import { MdLockReset } from "react-icons/md";
-import { BiLogOut } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { BiCollapse } from 'react-icons/bi';
 import { BsArrowsFullscreen } from 'react-icons/bs';

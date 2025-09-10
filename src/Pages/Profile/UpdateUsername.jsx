@@ -6,10 +6,12 @@ import UserContextProvider from '../../Context/UserContextProvider';
 import { useContext, useState } from 'react';
 import Loader from '../../Components/Loader/Loader';
 import axios from 'axios';
+import MessageAlert from '../../Components/Alert/MessageAlert';
 
 function UpdateUsername(){
     const {user,setUser,loading}= useContext(UserContext);
     const [error,setError] = useState(null);
+    const [showAlert,setShowAlert]= useState(false);
 
 
     const handleSubmit=async (data)=>{
@@ -30,7 +32,7 @@ function UpdateUsername(){
             );
 
             if(await res){
-                alert("User's username updated successfully.")
+                setShowAlert(true);
             }
 
             setUser(newUser)
@@ -62,7 +64,7 @@ function UpdateUsername(){
             const updatedUser = updatedUsers.find(u => u.id === userId);
             setUser(updatedUser);
             if(updatedUser){
-                alert("User's username updated successfully.")
+                setShowAlert(true);
             }
         }
     }
@@ -80,6 +82,10 @@ function UpdateUsername(){
                         <UpdateUsernameForm />
                     </FormContainer>
             </section>
+
+            {showAlert &&
+                <MessageAlert message="User has been updated successfully" duration={1000} type='success'/>
+            }
         </div>
     );
 }

@@ -13,10 +13,12 @@ function RegisterForm({ register, errors }) {
 
             <div className={`flex field`}>
                 <label htmlFor='email'>Email</label>
-                <input id='email' name='email' type='email' {...register("email", { required: 'Email is required', pattern:{
-                    value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
-                    message:"Please enter a valid email address"
-                } })} />
+                <input id='email' name='email' type='email' {...register("email", {
+                    required: 'Email is required', pattern: {
+                        value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+                        message: "Please enter a valid email address"
+                    }
+                })} />
             </div>
             <p className="error">{errors.email ? errors.email.message : ''}</p>
 
@@ -24,11 +26,7 @@ function RegisterForm({ register, errors }) {
                 <label htmlFor='password'>Password</label>
                 <input id='password' name='password' type='password' {...register("password", {
                     required: 'Password is required', minLength: { value: 6, message: "Password must be atleast 6 chracters" }, maxLength: { value: 30, message: "Password must be at most 30 chracters" }
-                    , pattern: {
-                        value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]+$/,
-                        message:
-                            "Password must contain letters, and numbers",
-                    },
+                    ,
                 })} />
             </div>
             <p className="error">{errors.password ? errors.password.message : ''}</p>

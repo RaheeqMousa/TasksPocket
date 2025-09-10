@@ -1,5 +1,4 @@
 import React from 'react'
-import Navbar from './Components/Navbar/Navbar'
 import { Routes,Route } from 'react-router-dom'
 import MainLayout from './Layouts/MainLayout'
 import Home from './Pages/Home/Home'
@@ -12,7 +11,6 @@ import AuthProtectedRoute from './Components/AuthProtectedRoute.jsx/AuthProtecte
 import { BrowserRouter } from 'react-router-dom'
 import UserContextProvider from './Context/UserContextProvider'
 import UpdateUsername from './Pages/Profile/UpdateUsername'
-import ResetPassword from './Pages/Profile/ResetPassword'
 import ProfileInfo from './Pages/Profile/ProfileInfo'
 import NotFound from './Components/NotFound/NotFound'
 
