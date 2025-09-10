@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import PocketImg from "../../assets/Images/pocket.png"
 import { FaFacebook } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
@@ -10,7 +9,7 @@ function Footer(){
         <footer className="flex flex-direction-column">
             <div className="row">
                 <div className="row">
-                    <img src={PocketImg} alt="pocket image" title="pocket image" width={30} height={30}/>
+                    <img src="../../public/pocket.png" alt="pocket image" title="pocket image" width={30} height={30}/>
                     <h4>TaskPocket</h4>
                 </div>
                 <ul className={`row ${Style.links}`} aria-label="Main navigation links">

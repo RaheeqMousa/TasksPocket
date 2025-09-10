@@ -1,4 +1,4 @@
-import PocketImg from "../../assets/Images/pocket.png"
+
 import Style from './Navbar.module.scss'
 import {Link} from 'react-router-dom'
 import {FaUser} from "react-icons/fa";
@@ -7,7 +7,7 @@ function Navbar(){
     return (
     <header className={`row ${Style.navbar}`}>
         <div className="row">
-            <img src={PocketImg} alt="pocket image" title="pocket image" width={30} height={30}/>
+            <img src="../../public/pocket.png" alt="pocket image" title="pocket image" width={30} height={30}/>
             <h1>TaskPocket</h1>
         </div>
         <ul className={`row ${Style.links}`} aria-label="Main navigation links">
