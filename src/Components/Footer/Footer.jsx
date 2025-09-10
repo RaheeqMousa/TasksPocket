@@ -25,7 +25,7 @@ function Footer(){
                     <li><a href="www.linkedin.com/in/raheeq-mousa" aria-label="Raheeq Mousa's Linkedin prfiele" target="_blank" rel="noopener noreferrer"><FaLinkedin color="white" size={28} /></a></li>
                 </ul>
                 <span>
-                    CopyRight &copy; <a href="mailto:raheeqmousa99@gmail.com">raheeqmousa99@gmail.com</a>. All rights reserved
+                    CopyRight &copy; <a href="mailto:raheeqmousa99@gmail.com" className={Style.email}>raheeqmousa99@gmail.com</a>. All rights reserved
                 </span>
             </div>
         </footer>

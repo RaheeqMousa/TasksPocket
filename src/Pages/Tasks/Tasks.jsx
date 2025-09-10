@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { FaPlus, FaEdit, FaTrash, FaInfoCircle } from "react-icons/fa";
+import { MdDragIndicator } from "react-icons/md";
 import DropDown from "../../Components/DropDown/DropDown";
 import Style from "./Tasks.module.scss";
 import TaskContainer from "../../Containers/TaskContainer/TaskContainer";
@@ -23,7 +24,7 @@ function Tasks() {
   );
   const draggedItem = useRef(null);
 
-  // Drag handlers
+
   const handleMouseDown = useCallback((index) => {
     draggedItem.current = index;
   }, []);
@@ -95,7 +96,7 @@ function Tasks() {
     run();
   }, [fetchTasks]);
 
-  // Modal handlers
+
   const handleOpenModal = useCallback((mode, task = null) => {
     setMode(mode);
     setSelectedTask(task);
@@ -116,11 +117,12 @@ function Tasks() {
 
     return [...tasks.slice(0, index), newTask, ...tasks.slice(index)];
   };
-  // Task updates
+
+
   const handleTaskSuccess = useCallback(
     (task) => {
       if (mode === "create") {
-        const updated= insertTaskByDueDate(tasks,task);
+        const updated = insertTaskByDueDate(tasks, task);
         setTasks(updated);
         setFilteredTasks(updated);
         let allTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
@@ -142,7 +144,6 @@ function Tasks() {
     [mode, tasks, handleCloseModal]
   );
 
-  // Filter actions
   const getCompletedTasks = useCallback(() => {
     setFilteredTasks(tasks.filter((t) => t.isCompleted));
   }, [tasks]);
@@ -173,7 +174,7 @@ function Tasks() {
         />
       </div>
 
-      {/* Modal */}
+
       {displayModal && (
         <TaskContainer
           mode={mode}
@@ -183,9 +184,9 @@ function Tasks() {
         />
       )}
 
-      {/* Task list */}
+
       <div className={`row ${Style["tasks-list"]}`} onMouseUp={handleMouseUp}>
-        {/* Create button */}
+
         <div
           className={`row justify-center ${Style.create} ${Style.card}`}
           onClick={() => handleOpenModal("create")}
@@ -197,12 +198,17 @@ function Tasks() {
 
         {filteredTasks?.map((task, index) => (
           <div
-            key={task.id} // Use task id instead of index
+            key={task.id}
+            aria-label="Task, draggable"
             className={`row justify-center ${Style.card}`}
             style={borderColor}
             onMouseDown={() => handleMouseDown(index)}
             onMouseMove={() => handleMove(index)}
           >
+            <div className={`row ${Style['drag-icon']}`} aria-label="Drag icon">
+              <MdDragIndicator />
+            </div>
+
             <h2>{task.title}</h2>
             <p>{task.description}</p>
             <time>{new Date(task.dueDate).toLocaleDateString()}</time>

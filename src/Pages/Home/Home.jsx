@@ -2,13 +2,14 @@ import Carousel from "../../Components/Carousel/Carousel";
 import FeatureCard from "../../Components/FeatureCard/FeatureCard";
 import { GrSecure } from "react-icons/gr";
 import { MdManageAccounts } from "react-icons/md";
-import TaskImg from '../../assets/Images/TasksBoard.webp'
+import TaskImg from '../../assets/Images/TasksScribble.png'
 import Style from './Home.module.scss'
+import TaskManagement from '../../assets/Images/TaskManagement.png';
+import SaveTime from '../../assets/Images/SaveTime.png';
+
 function Home(){
     
-    const images=["https://tse1.mm.bing.net/th/id/OIP.TC-k8_bTRSHHkTNWTuJaGAHaEK?rs=1&pid=ImgDetMain&o=7&rm=3",
-        "https://hips.hearstapps.com/hmg-prod/images/close-up-of-tulips-blooming-in-field-royalty-free-image-1584131603.jpg",
-    "https://tse4.mm.bing.net/th/id/OIP.IIhY17jhCesbLBh1DlyA-QHaG4?rs=1&pid=ImgDetMain&o=7&rm=3"];
+    const images = [TaskManagement, SaveTime];
 
     let features= [
         {

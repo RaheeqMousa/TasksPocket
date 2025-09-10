@@ -35,7 +35,6 @@ function App() {
                   <Route path="user/profile/" element={<Profile />} >
                     <Route path='ProfileInfo' element={<ProfileInfo />}/>
                     <Route path='UpdateUsername' element={<UpdateUsername />}/>
-                    <Route path='ResetPassword' element={<ResetPassword />} />
                   </Route>
               </Route>
             </Route>

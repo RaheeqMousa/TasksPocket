@@ -47,10 +47,6 @@ function Profile(){
                     <MdModeEditOutline size={22} color="#8398A0"/>
                     <Link to="/user/profile/UpdateUsername" >Update username</Link>
                 </div>
-                <div className={`row ${Style.link}`}>
-                    <MdLockReset  size={22} color="#8398A0"/>
-                    <Link to="/user/profile/ResetPassword" >Reset password</Link>
-                </div>
                 <button onClick={handleSubmit}>Logout</button>
             </aside>
 

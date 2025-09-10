@@ -20,6 +20,29 @@
         border-radius: 20px;
         transition: all 0.5s;
         flex-direction: column;
+        cursor: grab;
+        transition: all 0.2s;
+
+        &:active{
+            cursor: grabbing;
+            user-select: none;
+            box-shadow:  0 4px 12px 0 rgba(0, 0, 0, 0.4);
+            opacity: 0.5;
+        }
+
+        .drag-icon{
+            width: 90%;
+            justify-content: flex-end;
+        }
+
+        p{
+            font-weight: 600;
+        }
+
+        h2{
+            font-family: var(--taskFont);
+        }
+        font-family: var(--taskFont);
 
         input[type="checkbox"]{
             width: 20px;

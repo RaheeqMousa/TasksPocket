@@ -22,8 +22,8 @@ function Carousel({images}){
                     height={300} width={500}
                     />
                 <div className={`row ${Style.controls}`}>
-                    <button onClick={prev} aria-label="Previous slide"><BsFillArrowLeftSquareFill color="white" size={30}  /></button>     
-                    <button onClick={next} aria-label="Next slide"><BsFillArrowRightSquareFill color="white" size={30}  /></button>
+                    <button onClick={prev} aria-label="Previous slide"><BsFillArrowLeftSquareFill color="black" size={30}  /></button>     
+                    <button onClick={next} aria-label="Next slide"><BsFillArrowRightSquareFill color="black" size={30}  /></button>
                 </div>
             </div>     
         </section>

@@ -1,7 +1,6 @@
 
 import FormContainer from "../../Containers/FormContainer";
 import RegisterForm from "../../Components/RegisterForm/RegisterForm";
-import Style from '../../Styles/auth.module.css'
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
@@ -59,8 +58,8 @@ function Register() {
     }
 
     return (
-        <div className={`row flex-direction-column ${Style['auth-page']}`}>
-            <section className={`flex flex-direction-column ${Style['form-section']}`}>
+        <div className={`row flex-direction-column auth-page`}>
+            <section className={`flex flex-direction-column form-section`}>
                 <h2>SignUp</h2>
                 <FormContainer onSubmit={registerSubmit} serverError={serverError} >
                     <RegisterForm />

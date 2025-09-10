@@ -1,10 +1,16 @@
 :root{
-    --mainFont:'Times New Roman','Gill Sans',sans-serif;
+    --mainFont:Roboto, Geneva, sans-serif;
+    --secondaryFont: Nunito, Geneva, sans-serif;
+    --taskFont:'Patrick Hand', Geneva, sans-serif;
     --authFormBackground:#6F42C1;
 }
 
-body{
+h1, h2, h3, h4, h5, h6{
     font-family: var(--mainFont);
+}
+
+body{
+    font-family: var(--secondaryFont);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -146,6 +152,7 @@ a{
 .justify-center{
     justify-content: center;
 }
+
 
  @media screen and (max-width: 600px){
     .container {

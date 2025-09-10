@@ -1,6 +1,5 @@
 import FormContainer from "../../Containers/FormContainer";
 import LoginForm from "../../Components/LoginForm/LoginForm";
-import Style from '../../Styles/auth.module.css'
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState,useEffect } from "react";
 import axios from "axios";
@@ -76,8 +75,8 @@ function Login(){
     return(
         <>
             {showAlert && <MessageAlert type="success" message={alertMessage} duration={2000} /> }
-            <div className={`row flex-direction-column ${Style['auth-page']}`}>
-                <section className={`flex flex-direction-column ${Style['form-section']}`}>   
+            <div className={`row flex-direction-column auth-page`}>
+                <section className={`flex flex-direction-column form-section`}>   
                     <h2>SignIn</h2>   
                     <FormContainer onSubmit={loginSubmit} serverError={error} initialData={null}>
                         <LoginForm />

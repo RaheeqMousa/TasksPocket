@@ -145,21 +145,21 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
                     userId: localStorage.getItem('userId')
                 };
 
-                // Load tasks safely
+                //Load tasks
                 const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
 
-                // Update the matching task
+                //Update the matching task
                 const updatedTasks = tasks.map(t =>
                     t.id === data.id ? { ...t, ...newData } : t
                 );
 
-                // Save back to localStorage
+                //Save to localStorage
                 localStorage.setItem("tasks", JSON.stringify(updatedTasks));
 
-                // Find updated task
+                //Find updated task
                 const updatedTask = updatedTasks.find(t => t.id === data.id);
 
-                // Success message
+                //Success message
                 setAlertMessage("Task has been updated successfully");
                 setShowAlert(true);
 
