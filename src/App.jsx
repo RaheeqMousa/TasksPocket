@@ -1,6 +1,6 @@
 import React from 'react'
 import Navbar from './Components/Navbar/Navbar'
-import { Routes,Route, Router } from 'react-router-dom'
+import { Routes,Route } from 'react-router-dom'
 import MainLayout from './Layouts/MainLayout'
 import Home from './Pages/Home/Home'
 import Login from './Pages/Login/Login'
@@ -14,6 +14,7 @@ import UserContextProvider from './Context/UserContextProvider'
 import UpdateUsername from './Pages/Profile/UpdateUsername'
 import ResetPassword from './Pages/Profile/ResetPassword'
 import ProfileInfo from './Pages/Profile/ProfileInfo'
+import NotFound from './Components/NotFound/NotFound'
 
 function App() {
 
@@ -37,9 +38,12 @@ function App() {
                     <Route path='UpdateUsername' element={<UpdateUsername />}/>
                   </Route>
               </Route>
+
+              <Route path="*" element={<NotFound />} />
             </Route>
 
           </Routes>
+          
           </UserContextProvider >
       </BrowserRouter>
     </>
