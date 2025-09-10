@@ -2,7 +2,7 @@ import Style from './Profile.module.scss'
 import FormContainer from '../../Containers/FormContainer';
 import UpdateUsernameForm from '../../Components/UpdateUsername/UpdateUsernameForm'
 import { UserContext } from '../../Context/UserContext';
-import UserContextProvider from '../../Context/userContextProvider';
+import UserContextProvider from '../../Context/UserContextProvider';
 import { useContext, useState } from 'react';
 import Loader from '../../Components/Loader/Loader';
 import axios from 'axios';
