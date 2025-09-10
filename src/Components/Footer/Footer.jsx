@@ -9,7 +9,7 @@ function Footer(){
         <footer className="flex flex-direction-column">
             <div className="row">
                 <div className="row">
-                    <img src="../../public/pocket.png" alt="pocket image" title="pocket image" width={30} height={30}/>
+                    <img src="/pocket.png" alt="pocket image" title="pocket image" width={30} height={30}/>
                     <h4>TaskPocket</h4>
                 </div>
                 <ul className={`row ${Style.links}`} aria-label="Main navigation links">
