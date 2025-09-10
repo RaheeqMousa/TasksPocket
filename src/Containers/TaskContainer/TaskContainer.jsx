@@ -32,6 +32,27 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
         }
     }, [mode]);
 
+    const handleOverlayClick=(e)=>{
+        if(e.target === e.currentTarget){
+            handleCloseForm();
+        }
+    }
+
+    
+    useEffect(() => {
+        const handleEsc = (e) => {
+          if (e.key === "Escape") {
+            handleCloseForm();
+          }
+        };
+        document.addEventListener("keydown", handleEsc);
+    
+        return () => {
+          document.removeEventListener("keydown", handleEsc);
+        };
+    }, [handleCloseForm]);
+
+
     const handleConfirm = useCallback( async (choice) => {
         setShowConfirm(false);
         if (choice === true && initialTask) {
@@ -191,7 +212,7 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
     }), [initialTask]);
 
     return (
-        <>
+        <div onClick={handleOverlayClick} className={Style.overlay} role="presentation">
             {(mode === "create" || mode === "update" || mode === "details") && (
                 <div className={`${Style['modal']} `} role="dialog" aria-label={`${mode} task modal`} aria-modal="true" aria-describedby={`modal-title`} >
                     <button className={Style['close-btn']} onClick={() => { handleCloseForm(); }} aria-label="Close modal">X</button>
@@ -211,7 +232,7 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
                 message={`Are you sure you want to delete the task "${initialTask?.title}"?`}
                 onClose={handleConfirm}
             />}
-        </>
+        </div>
     );
 
 }

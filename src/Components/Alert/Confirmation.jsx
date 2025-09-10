@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Style from './Alert.module.scss';
 
 function Confirmation({message,onClose }) {
@@ -10,16 +10,41 @@ function Confirmation({message,onClose }) {
     color: "#987200ff"
   };
 
-  const handleClose = (choice) => {
-    setClosing(true);
-    setTimeout(() => {
-      onClose(choice);
-    }, 300);
-  };
+  const handleClose = useCallback(
+    (choice) => {
+      setClosing(true);
+      setTimeout(() => {
+        onClose(choice);
+      }, 300);
+    },
+    [onClose] // dependency on onClose
+  );
 
+  const handleOverlayClick=(e)=>{
+    if(e.target === e.currentTarget){
+      handleClose(false);
+    }
+  }
 
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") {
+        handleClose(false);
+      }
+    };
+    document.addEventListener("keydown", handleEsc);
+
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, [handleClose]);
 
   return (
+    <div
+      className={`row justify-center {Style.overlay}`}
+      onClick={handleOverlayClick}
+      role="presentation"
+    >
     <div
       style={style}
       className={`${Style.modal}`}
@@ -38,6 +63,7 @@ function Confirmation({message,onClose }) {
                 </button>
             </div>
         </div>
+    </div>
     </div>
   );
 }
