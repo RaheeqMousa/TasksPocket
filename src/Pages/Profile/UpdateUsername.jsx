@@ -29,7 +29,6 @@ function UpdateUsername(){
                 }
             );
 
-            console.log(res);
             if(await res){
                 alert("User's username updated successfully.")
             }
@@ -42,7 +41,7 @@ function UpdateUsername(){
             //     : er.message || "Unexpected error";
 
             // setError(message);
-            console.log(er)
+            console.log(er);
             setError('');
  
             const users=JSON.parse(localStorage.getItem("users")||[]);

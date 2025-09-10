@@ -18,7 +18,6 @@ function UserContextProvider({children}){
 
         try{
             const res=await axios.get(`https://localhost:7092/api/Users/${token}`);
-            console.log(res.data);
             setUser(await res.data);
         }catch(e){
             console.log(e);

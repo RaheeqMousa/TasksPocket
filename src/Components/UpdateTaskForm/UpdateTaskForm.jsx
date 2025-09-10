@@ -1,7 +1,7 @@
 
-function UpdateTaskForm({register, errors, initialTask}){
+function UpdateTaskForm({register, errors}){
 
-  console.log(initialTask.isCompleted);
+
     return(
         <div className={`flex flex-direction-column controls`}>
             <div className={`flex field`}>
@@ -31,7 +31,6 @@ function UpdateTaskForm({register, errors, initialTask}){
                     type="checkbox" 
                     {...register('isCompleted', { setValueAs: v => !!v })}
                 />
-                {console.log(initialTask)}
             </div>
             <p className="error">{errors.duedate?.message}</p>
         </div>

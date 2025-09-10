@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Style from './Alert.module.scss';
 
 function MessageAlert({ message, type = "info", duration = 5000 }) {
-    console.log(message)
+
     const [visible,isVisible] = useState(true);
 
     useEffect(() => {

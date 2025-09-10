@@ -55,7 +55,7 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
     const handleSubmit = useCallback( async (data) => {
         try {
             if (mode === "create") {
-                console.log(data);
+
                 const res = await axios.post('https://localhost:7092/api/Tasks/create',
                     {
                         title: data.title,
@@ -158,7 +158,6 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
 
                 // Find updated task
                 const updatedTask = updatedTasks.find(t => t.id === data.id);
-                console.log(updatedTask);
 
                 // Success message
                 setAlertMessage("Task has been updated successfully");

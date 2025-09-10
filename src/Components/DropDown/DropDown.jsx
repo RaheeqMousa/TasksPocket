@@ -5,7 +5,6 @@ import { IoMdSettings } from "react-icons/io";
 export default function DropDown({ items=[], Actions=[] }) {
     const [isOpen, setIsOpen] = useState(false);
 
-    console.log();
     
     const toggleDropDown = () => {
         setIsOpen(!isOpen);

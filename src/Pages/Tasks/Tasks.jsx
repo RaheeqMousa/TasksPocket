@@ -9,8 +9,15 @@ function Tasks() {
   const [mode, setMode] = useState("create");
   const [displayModal, setDisplayModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-  const [tasks, setTasks] = useState([]);
-  const [filteredTasks, setFilteredTasks] = useState([]);
+  const [tasks, setTasks] = useState(() => {
+    let stored = JSON.parse(localStorage.getItem("tasks") || "[]");
+    if (!Array.isArray(stored)) stored = [stored];
+    const userTasks = stored.filter(
+      (t) => String(t.userId) === String(localStorage.getItem("userId"))
+    );
+    return userTasks;
+  });
+  const [filteredTasks, setFilteredTasks] = useState(tasks);
   const [theme, setTheme] = useState(
     localStorage.getItem("themeColor") || "#c2d5f6"
   );
@@ -37,6 +44,17 @@ function Tasks() {
 
       setFilteredTasks(newItems);
       setTasks(newItems);
+
+      let allTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+      if (!Array.isArray(allTasks)) allTasks = [allTasks];
+
+      const otherUsers = allTasks.filter(
+        (t) => String(t.userId) !== String(localStorage.getItem("userId"))
+      );
+
+      const merged = [...otherUsers, ...newItems];
+      localStorage.setItem("tasks", JSON.stringify(merged));
+
       draggedItem.current = index;
     },
     [filteredTasks]
@@ -64,17 +82,17 @@ function Tasks() {
         (t) => t.userId === localStorage.getItem("userId")
       );
 
-      const sorted = [...userTasks].sort(
-        (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
-      );
 
-      setTasks(sorted);
-      setFilteredTasks(sorted);
+      setTasks(userTasks);
+      setFilteredTasks(userTasks);
     }
   }, []);
 
   useEffect(() => {
-    fetchTasks();
+    const run = async () => {
+      await fetchTasks();
+    };
+    run();
   }, [fetchTasks]);
 
   // Modal handlers
@@ -89,15 +107,27 @@ function Tasks() {
     setSelectedTask(null);
   }, []);
 
+
+  const insertTaskByDueDate = (tasks, newTask) => {
+    const newDate = new Date(newTask.dueDate);
+    const index = tasks.findIndex(t => new Date(t.dueDate) > newDate);
+
+    if (index === -1) return [...tasks, newTask]; // append if last
+
+    return [...tasks.slice(0, index), newTask, ...tasks.slice(index)];
+  };
   // Task updates
   const handleTaskSuccess = useCallback(
     (task) => {
       if (mode === "create") {
-        const updated = [...tasks, task].sort(
-          (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
-        );
+        const updated= insertTaskByDueDate(tasks,task);
         setTasks(updated);
         setFilteredTasks(updated);
+        let allTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+        const otherUsers = allTasks.filter(
+          (t) => t.userId !== localStorage.getItem('userId')
+        );
+        localStorage.setItem("tasks", JSON.stringify([...otherUsers, ...updated]));
       } else if (mode === "delete") {
         const updated = tasks.filter((t) => t.id !== task);
         setTasks(updated);
@@ -130,7 +160,7 @@ function Tasks() {
     localStorage.setItem("themeColor", color);
   };
 
-  const borderColor ={ border: `4px solid ${theme}` }
+  const borderColor = { border: `4px solid ${theme}` }
 
   return (
     <section className={`row justify-center ${Style.tasks} container`}>

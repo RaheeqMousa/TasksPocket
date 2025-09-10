@@ -22,7 +22,6 @@ function Login(){
     const loginSubmit=async (data)=>{
         setLoading(true);
         const {username, password}=data;
-        console.log(data);
         try{
             const res= await axios.get('https://localhost:7092/api/Users');
 
@@ -41,18 +40,14 @@ function Login(){
             
         }catch(er){
             console.log(er);
-            console.log("fallback")
 
             let persons= JSON.parse(localStorage.getItem('users'))||[];
-            console.log(persons);
             if(!Array.isArray(persons)){
                 persons=[persons];
             }
             const user= persons.find((u)=>{
-                console.log(u);
                 return u.username==username && u.password==password }
             );
-            console.log(user);
             if(user){
                 localStorage.setItem('userId',user.id);
                 setUser(user);

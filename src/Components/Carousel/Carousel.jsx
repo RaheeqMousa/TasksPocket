@@ -7,9 +7,8 @@ function Carousel({images}){
     const [current,setCurrent]= useState(0);
     
 
-    console.log(images);
-    const next=()=>{ current===images.length-1? setCurrent(0): setCurrent(current+1); console.log(current)}
-    const prev=()=>{ current===0? setCurrent(images.length-1): setCurrent(current-1); console.log(current)}
+    const next=()=>{ current===images.length-1? setCurrent(0): setCurrent(current+1);}
+    const prev=()=>{ current===0? setCurrent(images.length-1): setCurrent(current-1); }
     if (!images || images.length === 0) {
         return <p>No images available</p>;
     }
