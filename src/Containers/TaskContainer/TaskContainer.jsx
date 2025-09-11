@@ -2,11 +2,12 @@ import CreateTaskForm from "../../Components/CreateTaskForm/CreateTaskForm";
 import UpdateTaskForm from "../../Components/UpdateTaskForm/UpdateTaskForm";
 import FormContainer from '../FormContainer'
 import Style from './Tasks.module.scss'
-import { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import axios from 'axios'
 import MessageAlert from "../../Components/Alert/MessageAlert";
 import Confirmation from "../../Components/Alert/Confirmation";
 import TaskDetails from "../../Components/TaskDetails/TaskDetails";
+const API_BASE_URL= import.meta.env.VITE_API_BASE_URL;
 
 function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
 
@@ -15,6 +16,7 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
     const [showConfirm, setShowConfirm] = useState(true);
     const [alertMessage, setAlertMessage] = useState("");
     const [error, setError] = useState("");
+    const alertMessageData = useRef(null);
 
     const handleCloseForm = useCallback(() => {
         setClosing(true);
@@ -22,7 +24,22 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
         setTimeout(() => {
             if (onClose) onClose();
         }, 300);
+
     },[onClose]);
+
+    useEffect(() => {
+        if (!showAlert) return;
+
+        const timer = setTimeout(() => {
+            if (onSuccess) {
+                onSuccess(alertMessageData.current);
+            }
+            handleCloseForm();
+            setShowAlert(false);
+        }, 2000);
+
+        return () => clearTimeout(timer);
+    }, [showAlert, onSuccess, handleCloseForm]);
 
     useEffect(() => {
         if (mode === "delete") {
@@ -57,7 +74,7 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
         setShowConfirm(false);
         if (choice === true && initialTask) {
             try {
-                const res = await axios.delete(`https://localhost:7092/api/Tasks/delete/${initialTask.id}`);
+                const res = await axios.delete(`${API_BASE_URL}/Tasks/delete/${initialTask.id}`);
                 if (res.status === 200) {
                     if (onSuccess) onSuccess(initialTask.id); // Pass deleted task id
                     handleCloseForm();
@@ -77,7 +94,7 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
         try {
             if (mode === "create") {
 
-                const res = await axios.post('https://localhost:7092/api/Tasks/create',
+                const res = await axios.post(`${API_BASE_URL}/Tasks/create`,
                     {
                         title: data.title,
                         description: data.description,
@@ -88,20 +105,12 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
                 );
                 if (res.data) {
                     setAlertMessage("Task Created successfully");
+                    alertMessageData.current=res.data;
                     setShowAlert(true);
-
-                    if (onSuccess) {
-                        setTimeout(() => {
-                            onSuccess(res.data);
-                            handleCloseForm();
-                            setShowAlert(false);
-                        }, 2000);
-
-                    }
                 }
                 
             } else {
-                const res = await axios.put(`https://localhost:7092/api/Tasks/update/${initialTask.id}`, {
+                const res = await axios.put(`${API_BASE_URL}/Tasks/update/${initialTask.id}`, {
                     title: data.title,
                     description: data.description,
                     dueDate: new Date(data.dueDate),
@@ -110,16 +119,8 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
                 });
                 if (res.data) {
                     setAlertMessage("Task has been updated successfully");
+                    alertMessageData.current=res.data;
                     setShowAlert(true);
-
-                    if (onSuccess) {
-                        setTimeout(() => {
-                            onSuccess(res.data);
-                            handleCloseForm();
-                            setShowAlert(false);
-                        }, 2000);
-
-                    }
                 }
             }
         } catch (er) {
@@ -146,6 +147,7 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
 
 
                 setAlertMessage("Task has been created successfully");
+                alertMessageData.current=newData;
                 setShowAlert(true);
 
                 if (onSuccess) {
@@ -182,15 +184,15 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
 
                 //Success message
                 setAlertMessage("Task has been updated successfully");
+                alertMessageData.current=updatedTask;
                 setShowAlert(true);
-
-                if (onSuccess) {
-                    setTimeout(() => {
-                        onSuccess(updatedTask);
-                        handleCloseForm();
-                        setShowAlert(false);
-                    }, 2000);
-                }
+                // if (onSuccess) {
+                //     setTimeout(() => {
+                //         onSuccess(updatedTask);
+                //         handleCloseForm();
+                //         setShowAlert(false);
+                //     }, 2000);
+                // }
             }
 
 
@@ -211,11 +213,16 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
             : ''
     }), [initialTask]);
 
+    const deleteMessage = useMemo(
+        () => `Are you sure you want to delete the task "${initialTask?.title}"?`,
+        [initialTask?.title],
+    );
+
     return (
         <div onClick={handleOverlayClick} className={Style.overlay} role="presentation">
             {(mode === "create" || mode === "update" || mode === "details") && (
                 <div className={`${Style['modal']} `} role="dialog" aria-label={`${mode} task modal`} aria-modal="true" aria-describedby={`modal-title`} >
-                    <button className={Style['close-btn']} onClick={() => { handleCloseForm(); }} aria-label="Close modal">X</button>
+                    <button className={Style['close-btn']} onClick={handleCloseForm} aria-label="Close modal">X</button>
                     <div className={`flex flex-direction-column ${Style['modal-content']} ${closing ? Style.hide : Style.show}`}>
                         <h3 id="modal-title">{modalTitles[mode]}</h3>
                         {
@@ -229,7 +236,7 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
             {showAlert && <MessageAlert message={alertMessage} duration={2000} type="success" />}
 
             {showConfirm && <Confirmation
-                message={`Are you sure you want to delete the task "${initialTask?.title}"?`}
+                message={deleteMessage}
                 onClose={handleConfirm}
             />}
         </div>

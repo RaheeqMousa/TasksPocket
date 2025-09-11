@@ -1,0 +1,1 @@
+export const FILTER_ITEMS = ["All", "Completed", "Not completed"];

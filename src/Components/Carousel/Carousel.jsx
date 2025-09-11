@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 import { BsFillArrowRightSquareFill } from "react-icons/bs";
 import Style from './Carousel.module.css'
@@ -7,8 +7,9 @@ function Carousel({images}){
     const [current,setCurrent]= useState(0);
     
 
-    const next=()=>{ current===images.length-1? setCurrent(0): setCurrent(current+1);}
-    const prev=()=>{ current===0? setCurrent(images.length-1): setCurrent(current-1); }
+    const next=useCallback(()=>{ current===images.length-1? setCurrent(0): setCurrent(current+1);},[current, images.length])
+    const prev=useCallback(()=>{ current===0? setCurrent(images.length-1): setCurrent(current-1); },[current, images.length])
+
     if (!images || images.length === 0) {
         return <p>No images available</p>;
     }

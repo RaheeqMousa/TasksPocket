@@ -1,30 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Style from './Alert.module.scss';
+import {backgroundColors, textColors} from './constants.js'
 
 function MessageAlert({ message, type = "info", duration = 5000 }) {
 
-    const [visible,isVisible] = useState(true);
+    const [visible,setVisible] = useState(true);
 
     useEffect(() => {
-        const timer = setTimeout(() => isVisible(false), duration);
+        const timer = setTimeout(() => setVisible(false), duration);
         return () => clearTimeout(timer);
     }, [duration]);
 
-    if(!visible) return;
+    if(!visible) return null;
 
-    const backgroundColors = {
-        success: "#b9f3c7ff",
-        error: "#f5daddff",
-        info: "white",
-        warning: "#fff3cdff",
-    };
-
-    const textColors = {
-        success: "#314035ff",
-        error: "#4f1c22ff",
-        info: "blue",
-        warning: "#987200ff",
-    };
 
 
     return (
@@ -40,7 +28,7 @@ function MessageAlert({ message, type = "info", duration = 5000 }) {
             aria-describedby='alert-message'
             aria-modal='true'
         >   
-        <button className={Style['close-btn']} onClick={() => { isVisible(false); }} aria-label="Close modal" >X</button>
+        <button className={Style['close-btn']} onClick={() => { setVisible(false); }} aria-label="Close modal" >X</button>
             <div className={`row ${Style['modal-content']} ${visible ? Style.show : Style.hide}`}>    
                 <p id="alert-message">{message}</p>
             </div>

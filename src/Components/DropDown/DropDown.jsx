@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
-import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
+import React, { useCallback, useState } from 'react'
 import { IoMdSettings } from "react-icons/io";
 
-export default function DropDown({ items=[], Actions=[] }) {
+export default function DropDown(props) {
+
+    const { items=[], Actions=[] } = props;
     const [isOpen, setIsOpen] = useState(false);
 
     
@@ -44,6 +45,14 @@ export default function DropDown({ items=[], Actions=[] }) {
     };
 
 
+    
+
+    const handleItemClick=useCallback((index)=>{
+        if(Actions[index]) Actions[index](); // call corresponding action
+        setIsOpen(false); // close dropdown after click
+    },[Actions]);
+
+
     return (
         <div className="flex flex-direction-column" style={styles.container} >
             <button 
@@ -63,12 +72,9 @@ export default function DropDown({ items=[], Actions=[] }) {
                             <li 
                                 role='menuitem'
                                 tabIndex={0}
-                                key={index} 
+                                key={`${item}-${index}`} 
                                 style={item === "Delete Account" ? {...styles.item, color:"white", backgroundColor:"red"}: styles.item}
-                                onClick={() => {
-                                    if(Actions[index]) Actions[index](); // call corresponding action
-                                    setIsOpen(false); // close dropdown after click
-                                }}
+                                onClick={handleItemClick}
                             >
                                 {item}
                             </li>

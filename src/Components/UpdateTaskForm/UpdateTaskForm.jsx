@@ -11,7 +11,7 @@ function UpdateTaskForm({register, errors}){
             <p className="error">{errors.title?.message}</p>
             <div className={`flex field`}>
                 <label htmlFor="description">Description:</label>
-                <textarea id="description" name="description" placeholder="Enter task's description"  cols={15} rows={3} {...register('description',{required:"Description is required", minLength:{value:5, message:"Title must be at least 10 chracters"}, maxLength:{value:32, message:"Title must be at most 100 chracters"}})}/>
+                <textarea id="description" name="description" placeholder="Enter task's description"  cols={15} rows={3} {...register('description',{required:"Description is required", minLength:{value:5, message:"Description must be at least 10 chracters"}, maxLength:{value:32, message:"Title must be at most 100 chracters"}})}/>
             </div>
             <p className="error">{errors.description?.message}</p>
             <div className={`flex field`}>
@@ -23,7 +23,7 @@ function UpdateTaskForm({register, errors}){
                     return selectedDate>=today || "Duedate can't be in the past!"
                 }})}/>
             </div>
-            <p className="error">{errors.duedate?.message}</p>
+            <p className="error">{errors.dueDate?.message}</p>
             <div className={`flex field`}>
                 <label htmlFor="isCompleted">Completed:</label>
                 <input 

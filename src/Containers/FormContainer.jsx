@@ -1,7 +1,8 @@
 import React from 'react'
 import {useForm} from 'react-hook-form'
 
-function FormContainer({children, onSubmit, serverError,initialData=null}){
+function FormContainer(props){
+    const {children, onSubmit, serverError,initialData=null} = props;
     const {register, handleSubmit, formState:{errors}} = useForm({defaultValues:initialData});
 
     return(

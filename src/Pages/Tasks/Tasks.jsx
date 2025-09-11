@@ -1,10 +1,11 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { FaPlus, FaEdit, FaTrash, FaInfoCircle } from "react-icons/fa";
 import { MdDragIndicator } from "react-icons/md";
 import DropDown from "../../Components/DropDown/DropDown";
 import Style from "./Tasks.module.scss";
 import TaskContainer from "../../Containers/TaskContainer/TaskContainer";
 import axios from "axios";
+import {FILTER_ITEMS} from './constants.js'
 
 function Tasks() {
   const [mode, setMode] = useState("create");
@@ -61,11 +62,39 @@ function Tasks() {
     [filteredTasks]
   );
 
+
+  const checkTask =useCallback( async (task) => {
+  const updatedTask = { ...task, isCompleted: !task.isCompleted };
+
+  try {
+    const res = await axios.put(
+      `${import.meta.env.VITE_API_BASE_URL}/${task.id}`,
+      updatedTask
+    );
+
+    if (res.data) {
+      setTasks((prev) => prev.map((t) => (t.id === task.id ? res.data : t)));
+      setFilteredTasks((prev) =>
+        prev.map((t) => (t.id === task.id ? res.data : t))
+      );
+    }
+  } catch (err) {
+    console.error(err);
+    const localTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    const updatedTasks = localTasks.map((t) =>
+      t.id === task.id ? { ...t, ...updatedTask } : t
+    );
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    setTasks(updatedTasks);
+    setFilteredTasks(updatedTasks);
+  }
+},[]);
+
   // Fetch tasks
   const fetchTasks = useCallback(async () => {
     try {
       const res = await axios.get(
-        `https://localhost:7092/api/Tasks/user/${localStorage.getItem("userId")}`
+        `${import.meta.env.VITE_API_BASE_URL}/Tasks/user/${localStorage.getItem("userId")}`
       );
       if (res.data) {
         const sorted = [...res.data].sort(
@@ -156,24 +185,32 @@ function Tasks() {
     setFilteredTasks(tasks);
   }, [tasks]);
 
-  const setCardTheme = (color) => {
+  const setCardTheme = useCallback( (color) => {
     setTheme(color);
     localStorage.setItem("themeColor", color);
-  };
+  },[]);
 
-  const borderColor = { border: `4px solid ${theme}` }
+  const borderColor =useMemo(()=> ({
+     border: `4px solid ${theme}`
+  }),[theme])
+
+  //The DropDown component re-renders on every Tasks render due to new array references.
+  const filterActions = useMemo(() => [
+    getAllTasks,
+    getCompletedTasks,
+    getNonCompletedTasks
+  ], [getAllTasks, getCompletedTasks, getNonCompletedTasks]);
 
   return (
     <section className={`row justify-center ${Style.tasks} container`}>
       <div className={`row ${Style.filter}`}>
-        <input type="color" onChange={(e) => setCardTheme(e.target.value)} />
+        <input type="color" onChange={(e) => setCardTheme(e.target.value)} aria-label="Choose your theme color" />
         <DropDown
-          items={["All", "Completed", "Not completed"]}
-          Actions={[getAllTasks, getCompletedTasks, getNonCompletedTasks]}
+          items={FILTER_ITEMS}
+          Actions={filterActions}
           aria-label="Filter tasks"
         />
       </div>
-
 
       {displayModal && (
         <TaskContainer
@@ -202,8 +239,8 @@ function Tasks() {
             aria-label="Task, draggable"
             className={`row justify-center ${Style.card}`}
             style={borderColor}
-            onMouseDown={() => handleMouseDown(index)}
-            onMouseMove={() => handleMove(index)}
+            onMouseDown={handleMouseDown(index)}
+            onMouseMove={handleMove(index)}
           >
             <div className={`row ${Style['drag-icon']}`} aria-label="Drag icon">
               <MdDragIndicator />
@@ -238,7 +275,7 @@ function Tasks() {
               <input
                 type="checkbox"
                 checked={task.isCompleted}
-                onChange={() => checkTask(task, setTasks, setFilteredTasks)}
+                onChange={() => checkTask(task)}
                 aria-label={`Mark task ${task.title} as completed`}
               />
             </div>
@@ -249,31 +286,6 @@ function Tasks() {
   );
 }
 
-const checkTask = async (task, setTasks, setFilteredTasks) => {
-  const updatedTask = { ...task, isCompleted: !task.isCompleted };
 
-  try {
-    const res = await axios.put(
-      `https://localhost:7092/api/Tasks/update/${task.id}`,
-      updatedTask
-    );
-
-    if (res.data) {
-      setTasks((prev) => prev.map((t) => (t.id === task.id ? res.data : t)));
-      setFilteredTasks((prev) =>
-        prev.map((t) => (t.id === task.id ? res.data : t))
-      );
-    }
-  } catch (err) {
-    console.error(err);
-    const localTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    const updatedTasks = localTasks.map((t) =>
-      t.id === task.id ? { ...t, ...updatedTask } : t
-    );
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
-    setTasks(updatedTasks);
-    setFilteredTasks(updatedTasks);
-  }
-};
 
 export default Tasks;

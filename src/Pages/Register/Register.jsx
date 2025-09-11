@@ -19,7 +19,7 @@ function Register() {
         };
         try {
             const response = await axios.post(
-                "https://localhost:7092/api/Users/create",
+                `${import.meta.env.VITE_API_BASE_URL}/Users/create`,
                 newUser,
                 {
                     headers: {

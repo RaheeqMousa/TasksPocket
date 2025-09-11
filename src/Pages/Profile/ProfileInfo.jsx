@@ -29,7 +29,7 @@ function ProfileInfo(){
         setShowConfirm(false);
         if (choice === true) {
             try{
-                const res=await axios.delete(`https://localhost:7092/api/Users/delete/${localStorage.getItem('userId')}`);
+                const res=await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/Users/delete/${localStorage.getItem('userId')}`);
                 if(res.status===200){
                     setShowAlert(true);
                 }

@@ -4,7 +4,6 @@ import Style from './Alert.module.scss';
 function Confirmation({message,onClose }) {
   const [closing, setClosing] = useState(false);
 
-
   const style = {
     backgroundColor: "#fff3cdff",
     color: "#987200ff"
@@ -15,16 +14,17 @@ function Confirmation({message,onClose }) {
       setClosing(true);
       setTimeout(() => {
         onClose(choice);
+        setClosing(false);
       }, 300);
     },
-    [onClose] // dependency on onClose
+    [onClose]
   );
 
-  const handleOverlayClick=(e)=>{
+  const handleOverlayClick=useCallback((e)=>{
     if(e.target === e.currentTarget){
       handleClose(false);
     }
-  }
+  },[handleClose])
 
   useEffect(() => {
     const handleEsc = (e) => {
@@ -41,7 +41,7 @@ function Confirmation({message,onClose }) {
 
   return (
     <div
-      className={`row justify-center {Style.overlay}`}
+      className={`row justify-center ${Style.overlay}`}
       onClick={handleOverlayClick}
       role="presentation"
     >
@@ -50,7 +50,7 @@ function Confirmation({message,onClose }) {
       className={`${Style.modal}`}
       aria-label="Confirmation Modal" aria-describedby='confirmation-alert-message' role="dialog" aria-modal="true"
     >
-      <button className={Style['close-btn']} onClick={()=>{ handleClose(false);}} aria-label="Close modal">X</button>
+      <button className={Style['close-btn']} onClick={()=>{ handleClose(false); }} aria-label="Close modal">X</button>
 
         <div className={`row ${Style['modal-content']} ${closing ? Style.hide : Style.show}`}  >            
             <p id="confirmation-alert-message">{message}</p>

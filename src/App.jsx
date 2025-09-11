@@ -1,18 +1,20 @@
-import React from 'react'
+import React, {Suspense, lazy} from 'react'
 import { Routes,Route } from 'react-router-dom'
-import MainLayout from './Layouts/MainLayout'
-import Home from './Pages/Home/Home'
-import Login from './Pages/Login/Login'
-import Register from './Pages/Register/Register'
-import Tasks from './Pages/Tasks/Tasks'
-import Profile from './Pages/Profile/Profile'
 import LoggedInProtectedRouter from './Components/LoggedInProtectedRoute/LoggedInProtectedRouter'
 import AuthProtectedRoute from './Components/AuthProtectedRoute.jsx/AuthProtectedRoute'
 import { BrowserRouter } from 'react-router-dom'
 import UserContextProvider from './Context/UserContextProvider'
-import UpdateUsername from './Pages/Profile/UpdateUsername'
-import ProfileInfo from './Pages/Profile/ProfileInfo'
 import NotFound from './Components/NotFound/NotFound'
+import Loader from './Components/Loader/Loader'
+
+const MainLayout = lazy(() => import('./Layouts/MainLayout'))
+const Home = lazy(() => import('./Pages/Home/Home'))
+const Login=  lazy(()=> import('./Pages/Login/Login'))
+const Register = lazy(()=> import('./Pages/Register/Register'))
+const Tasks = lazy(()=> import('./Pages/Tasks/Tasks'))
+const Profile = lazy(()=> import('./Pages/Profile/Profile'))
+const UpdateUsername = lazy(()=> import('./Pages/Profile/UpdateUsername'))
+const ProfileInfo = lazy(()=> import('./Pages/Profile/ProfileInfo'))
 
 function App() {
 
@@ -20,6 +22,7 @@ function App() {
     <>
       <BrowserRouter>
         <UserContextProvider >
+          <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<MainLayout />}>
               <Route index element={<Home />} />
@@ -41,7 +44,7 @@ function App() {
             </Route>
 
           </Routes>
-          
+          </Suspense>
           </UserContextProvider >
       </BrowserRouter>
     </>

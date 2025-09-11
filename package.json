@@ -9,6 +9,11 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
   "dependencies": {
     "axios": "^1.11.0",
     "bootstrap-icons": "^1.13.1",

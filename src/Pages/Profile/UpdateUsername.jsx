@@ -22,7 +22,7 @@ function UpdateUsername(){
             password:user.password,
         }
         try{
-            const res= await axios.put(`https://localhost:7092/api/Users/update/${localStorage.getItem('userId')}`,
+            const res= await axios.put(`${import.meta.env.VITE_API_BASE_URL}/Users/update/${localStorage.getItem('userId')}`,
                 newUser,
                 {
                     headers: {
@@ -46,7 +46,7 @@ function UpdateUsername(){
             console.log(er);
             setError('');
  
-            const users=JSON.parse(localStorage.getItem("users")||[]);
+            const users=JSON.parse(localStorage.getItem("users")||'[]');
             const userId=localStorage.getItem('userId');
             const nameExist=users.find(u=>
                 u.username===newUser.username

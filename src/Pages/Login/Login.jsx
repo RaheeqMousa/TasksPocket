@@ -22,11 +22,13 @@ function Login(){
         setLoading(true);
         const {username, password}=data;
         try{
-            const res= await axios.get('https://localhost:7092/api/Users');
+            const res= await axios.get(`${import.meta.env.VITE_API_BASE_URL}/Users`);
 
-            const users = await res.data;
+            console.log(`${import.meta.env.VITE_API_BASE_URL}/Users`);
+            const users = res.data;
+            console.log(users)
             const user= users.find((u)=>{ 
-                 return u.username==username && u.password==password 
+                 return u.username===username && u.password===password 
             });
 
             if(user){
@@ -45,7 +47,7 @@ function Login(){
                 persons=[persons];
             }
             const user= persons.find((u)=>{
-                return u.username==username && u.password==password }
+                return u.username===username && u.password===password }
             );
             if(user){
                 localStorage.setItem('userId',user.id);
