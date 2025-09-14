@@ -1,7 +1,7 @@
 
-
-function RegisterForm({register, errors }){
-
+import PropTypes from "prop-types";
+function RegisterForm(props){
+    const {register, errors }=props;
     return (
         <div className='flex flex-direction-column controls'>
 
@@ -16,3 +16,8 @@ function RegisterForm({register, errors }){
 
 }
 export default RegisterForm;
+
+RegisterForm.PropTypes = {
+    register:PropTypes.func.isRequired,
+    errors: PropTypes.string
+};

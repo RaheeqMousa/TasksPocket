@@ -95,7 +95,7 @@ function Tasks() {
     const newDate = new Date(newTask.dueDate);
     const index = tasks.findIndex(t => new Date(t.dueDate) > newDate);
 
-    if (index === -1) return [...tasks, newTask]; // append if last
+    if (index === -1) return [...tasks, newTask];
 
     return [...tasks.slice(0, index), newTask, ...tasks.slice(index)];
   };

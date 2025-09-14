@@ -13,7 +13,7 @@ import PropTypes from "prop-types";
 function TaskContainer(props) {
 
     const { mode, initialTask, onClose, onSuccess } = props;
-
+        
     const [closing, setClosing] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [showConfirm, setShowConfirm] = useState(true);
@@ -187,13 +187,6 @@ function TaskContainer(props) {
                 setAlertMessage("Task has been updated successfully");
                 alertMessageData.current=updatedTask;
                 setShowAlert(true);
-                // if (onSuccess) {
-                //     setTimeout(() => {
-                //         onSuccess(updatedTask);
-                //         handleCloseForm();
-                //         setShowAlert(false);
-                //     }, 2000);
-                // }
             }
     }, [initialTask]);
 

@@ -31,18 +31,12 @@ function UpdateUsername(){
                 }
             );
 
-            if(await res){
+            if(res.status===200){
                 setShowAlert(true);
             }
 
             setUser(newUser)
         }catch(er){
-            // const message =
-            //     er.response && er.response.data && er.response.data.message
-            //     ? er.response.data.message
-            //     : er.message || "Unexpected error";
-
-            // setError(message);
             console.log(er);
             setError('');
  

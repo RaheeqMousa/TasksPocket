@@ -14,7 +14,6 @@ function MessageAlert({ message, type = "info", duration = 5000 }) {
     if(!visible) return null;
 
 
-
     return (
 
         <div

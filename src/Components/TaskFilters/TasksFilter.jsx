@@ -46,7 +46,7 @@ function TasksFilter(props){
 }
 export default TasksFilter;
 
-TasksFilter.prototype={
+TasksFilter.PropTypes={
   setFilteredTasks: PropTypes.func.isRequired,
   setTheme: PropTypes.func.isRequired,
   tasks: PropTypes.arrayOf(
