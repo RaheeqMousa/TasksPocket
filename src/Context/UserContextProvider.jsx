@@ -12,7 +12,7 @@ function UserContextProvider({children}){
         user,
         setUser,
         loading
-    }), [user, setUser, loading]);
+    }), [user, loading]);
 
     const getUser=async()=>{
         const token= localStorage.getItem('userId');
@@ -24,7 +24,7 @@ function UserContextProvider({children}){
 
         try{
             const res=await axios.get(`${import.meta.env.VITE_API_BASE_URL}/Users/${token}`);
-            setUser(await res.data);
+            setUser(res.data);
         }catch(e){
             console.log(e);
             const users=JSON.parse(localStorage.getItem('users')||'[]');

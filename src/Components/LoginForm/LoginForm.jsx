@@ -1,7 +1,8 @@
 import {Link} from 'react-router-dom'
+import PropTypes from 'prop-types';
 
-function LoginForm({register,errors}){
-
+function LoginForm(props){
+    const {register, errors}=props;
     return(
         <div className={`flex flex-direction-column controls`}>
             <div className={`flex field`}>
@@ -19,3 +20,8 @@ function LoginForm({register,errors}){
     );
 }
 export default LoginForm;
+
+LoginForm.PropTypes = {
+    register:PropTypes.func.isRequired,
+    errors: PropTypes.string
+};

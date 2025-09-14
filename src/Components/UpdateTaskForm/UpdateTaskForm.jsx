@@ -1,7 +1,7 @@
+import PropTypes from "prop-types";
+function UpdateTaskForm(props){
 
-function UpdateTaskForm({register, errors}){
-
-
+    const {register, errors}=props;
     return(
         <div className={`flex flex-direction-column controls`}>
             <div className={`flex field`}>
@@ -37,3 +37,8 @@ function UpdateTaskForm({register, errors}){
     );
 }
 export default UpdateTaskForm;
+
+UpdateTaskForm.PropTypes = {
+    register:PropTypes.func.isRequired,
+    errors: PropTypes.string
+};

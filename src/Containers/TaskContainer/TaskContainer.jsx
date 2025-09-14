@@ -8,8 +8,11 @@ import MessageAlert from "../../Components/Alert/MessageAlert";
 import Confirmation from "../../Components/Alert/Confirmation";
 import TaskDetails from "../../Components/TaskDetails/TaskDetails";
 const API_BASE_URL= import.meta.env.VITE_API_BASE_URL;
+import PropTypes from "prop-types";
 
-function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
+function TaskContainer(props) {
+
+    const { mode, initialTask, onClose, onSuccess } = props;
 
     const [closing, setClosing] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
@@ -47,7 +50,7 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
         } else {
             setShowConfirm(false);
         }
-    }, [mode]);
+    }, [mode, initialTask]);
 
     const handleOverlayClick=(e)=>{
         if(e.target === e.currentTarget){
@@ -90,11 +93,10 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
         }
     },[onSuccess, initialTask, handleCloseForm]);
 
-    const handleSubmit = useCallback( async (data) => {
-        try {
-            if (mode === "create") {
 
-                const res = await axios.post(`${API_BASE_URL}/Tasks/create`,
+    const createTask = useCallback(async (data) => {
+        try{
+            const res = await axios.post(`${API_BASE_URL}/Tasks/create`,
                     {
                         title: data.title,
                         description: data.description,
@@ -108,28 +110,10 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
                     alertMessageData.current=res.data;
                     setShowAlert(true);
                 }
-                
-            } else {
-                const res = await axios.put(`${API_BASE_URL}/Tasks/update/${initialTask.id}`, {
-                    title: data.title,
-                    description: data.description,
-                    dueDate: new Date(data.dueDate),
-                    isCompleted: data.isCompleted,
-                    userId: localStorage.getItem('userId')
-                });
-                if (res.data) {
-                    setAlertMessage("Task has been updated successfully");
-                    alertMessageData.current=res.data;
-                    setShowAlert(true);
-                }
-            }
-        } catch (er) {
-
-            console.log(er)
+        }catch(e){
+            console.log(e)
             setError('');
-
-            if (mode === "create") {
-                const newData = {
+            const newData = {
                     id: `task-${Date.now()}`,
                     title: data.title,
                     description: data.description,
@@ -157,8 +141,25 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
                         setShowAlert(false);
                     }, 2000);
                 }
-            }
-            else {
+        }
+    }, [handleCloseForm, onSuccess]);
+
+    const updateTask = useCallback(async (data) => {
+        try{
+        const res = await axios.put(`${API_BASE_URL}/Tasks/update/${initialTask.id}`, {
+                    title: data.title,
+                    description: data.description,
+                    dueDate: new Date(data.dueDate),
+                    isCompleted: data.isCompleted,
+                    userId: localStorage.getItem('userId')
+                });
+                if (res.data) {
+                    setAlertMessage("Task has been updated successfully");
+                    alertMessageData.current=res.data;
+                    setShowAlert(true);
+                }
+            }catch(e){
+                console.log(e);
                 const newData = {
                     id: data.id, // keep the same id for updating
                     title: data.title,
@@ -194,10 +195,17 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
                 //     }, 2000);
                 // }
             }
+    }, [initialTask]);
 
+    const handleSubmit = useCallback( async (data) => {
+            if (mode === "create") {
 
-        }
-    },[handleCloseForm, onSuccess, mode, initialTask])
+                createTask(data);
+                
+            } else {
+                updateTask(data);
+            }
+    },[mode, createTask, updateTask])
 
     const modalTitles = useMemo(() => ({
         create: "Create Task",
@@ -219,28 +227,42 @@ function TaskContainer({ mode, initialTask, onClose, onSuccess }) {
     );
 
     return (
-        <div onClick={handleOverlayClick} className={Style.overlay} role="presentation">
-            {(mode === "create" || mode === "update" || mode === "details") && (
-                <div className={`${Style['modal']} `} role="dialog" aria-label={`${mode} task modal`} aria-modal="true" aria-describedby={`modal-title`} >
-                    <button className={Style['close-btn']} onClick={handleCloseForm} aria-label="Close modal">X</button>
-                    <div className={`flex flex-direction-column ${Style['modal-content']} ${closing ? Style.hide : Style.show}`}>
-                        <h3 id="modal-title">{modalTitles[mode]}</h3>
-                        {
-                            mode === 'details' ? <TaskDetails task={initialTask} /> :
-                                <FormContainer onSubmit={handleSubmit} serverError={error} initialData={initialFormData}>
-                                    {mode === 'create' ? <CreateTaskForm /> : <UpdateTaskForm initialTask={initialTask} />}
-                                </FormContainer>
-                        }
+        <>
+        {(mode === "create" || mode === "update" || mode === "details") && (
+            <div onClick={handleOverlayClick} className={Style.overlay} role="presentation">
+                
+                    <div className={`${Style['modal']} `} role="dialog" aria-label={`${mode} task modal`} aria-modal="true" aria-describedby={`modal-title`} >
+                        <button className={Style['close-btn']} onClick={handleCloseForm} aria-label="Close modal">X</button>
+                        <div className={`flex flex-direction-column ${Style['modal-content']} ${closing ? Style.hide : Style.show}`}>
+                            <h3 id="modal-title">{modalTitles[mode]}</h3>
+                            {
+                                mode === 'details' ? <TaskDetails task={initialTask} /> :
+                                    <FormContainer onSubmit={handleSubmit} serverError={error} initialData={initialFormData}>
+                                        {mode === 'create' ? <CreateTaskForm /> : <UpdateTaskForm initialTask={initialTask} />}
+                                    </FormContainer>
+                            }
+                        </div>
+                    
+                        {showAlert && <MessageAlert message={alertMessage} duration={2000} type="success" />}
                     </div>
-                </div>)}
-            {showAlert && <MessageAlert message={alertMessage} duration={2000} type="success" />}
-
-            {showConfirm && <Confirmation
-                message={deleteMessage}
-                onClose={handleConfirm}
-            />}
-        </div>
+            </div>)}
+            {showConfirm && 
+                <Confirmation message={deleteMessage} onClose={handleConfirm}/>
+                }
+        </>
     );
 
 }
 export default TaskContainer;
+
+TaskContainer.propTypes = {
+  mode: PropTypes.oneOf(["create", "edit", "delete"]).isRequired,
+  initialTask: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    title: PropTypes.string,
+    description: PropTypes.string,
+    dueDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
+  }),
+  onClose: PropTypes.func.isRequired,
+  onSuccess: PropTypes.func.isRequired,
+};

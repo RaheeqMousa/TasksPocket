@@ -1,96 +1,49 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { FaPlus, FaEdit, FaTrash, FaInfoCircle } from "react-icons/fa";
-import { MdDragIndicator } from "react-icons/md";
-import DropDown from "../../Components/DropDown/DropDown";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Style from "./Tasks.module.scss";
 import TaskContainer from "../../Containers/TaskContainer/TaskContainer";
 import axios from "axios";
-import {FILTER_ITEMS} from './constants.js'
+import TasksFilter from "../../Components/TaskFilters/TasksFilter.jsx";
+import TaskList from "../../Components/TaskList/TaskList.jsx";
+import { DragDropProvider } from "../../Context/DragDropContext/DragDropProvider.jsx";
+import useUserTasks from "../../Hooks/UseUserTasks.jsx";
 
 function Tasks() {
   const [mode, setMode] = useState("create");
   const [displayModal, setDisplayModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-  const [tasks, setTasks] = useState(() => {
-    let stored = JSON.parse(localStorage.getItem("tasks") || "[]");
-    if (!Array.isArray(stored)) stored = [stored];
-    const userTasks = stored.filter(
-      (t) => String(t.userId) === String(localStorage.getItem("userId"))
-    );
-    return userTasks;
-  });
+  const [tasks, setTasks] = useUserTasks();
+
   const [filteredTasks, setFilteredTasks] = useState(tasks);
   const [theme, setTheme] = useState(
     localStorage.getItem("themeColor") || "#c2d5f6"
   );
-  const draggedItem = useRef(null);
 
+  const checkTask = useCallback(async (task) => {
+    const updatedTask = { ...task, isCompleted: !task.isCompleted };
 
-  const handleMouseDown = useCallback((index) => {
-    draggedItem.current = index;
-  }, []);
-
-  const handleMouseUp = useCallback(() => {
-    draggedItem.current = null;
-  }, []);
-
-  const handleMove = useCallback(
-    (index) => {
-      if (draggedItem.current === null) return;
-
-      const newItems = [...filteredTasks];
-      const dragged = newItems[draggedItem.current];
-
-      newItems.splice(draggedItem.current, 1);
-      newItems.splice(index, 0, dragged);
-
-      setFilteredTasks(newItems);
-      setTasks(newItems);
-
-      let allTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-      if (!Array.isArray(allTasks)) allTasks = [allTasks];
-
-      const otherUsers = allTasks.filter(
-        (t) => String(t.userId) !== String(localStorage.getItem("userId"))
+    try {
+      const res = await axios.put(
+        `${import.meta.env.VITE_API_BASE_URL}/${task.id}`,
+        updatedTask
       );
 
-      const merged = [...otherUsers, ...newItems];
-      localStorage.setItem("tasks", JSON.stringify(merged));
+      if (res.data) {
+        setTasks((prev) => prev.map((t) => (t.id === task.id ? res.data : t)));
+        setFilteredTasks((prev) =>
+          prev.map((t) => (t.id === task.id ? res.data : t))
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      setTasks(prev => prev.map(t => t.id === task.id ? { ...t, ...updatedTask } : t));
+      setFilteredTasks(prev => prev.map(t => t.id === task.id ? { ...t, ...updatedTask } : t));
 
-      draggedItem.current = index;
-    },
-    [filteredTasks]
-  );
-
-
-  const checkTask =useCallback( async (task) => {
-  const updatedTask = { ...task, isCompleted: !task.isCompleted };
-
-  try {
-    const res = await axios.put(
-      `${import.meta.env.VITE_API_BASE_URL}/${task.id}`,
-      updatedTask
-    );
-
-    if (res.data) {
-      setTasks((prev) => prev.map((t) => (t.id === task.id ? res.data : t)));
-      setFilteredTasks((prev) =>
-        prev.map((t) => (t.id === task.id ? res.data : t))
-      );
+      const allTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+      const updatedAllTasks = allTasks.map(t => t.id === task.id ? { ...t, ...updatedTask } : t);
+      localStorage.setItem("tasks", JSON.stringify(updatedAllTasks));
     }
-  } catch (err) {
-    console.error(err);
-    const localTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    const updatedTasks = localTasks.map((t) =>
-      t.id === task.id ? { ...t, ...updatedTask } : t
-    );
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
-    setTasks(updatedTasks);
-    setFilteredTasks(updatedTasks);
-  }
-},[]);
+  }, [setTasks]);
 
-  // Fetch tasks
   const fetchTasks = useCallback(async () => {
     try {
       const res = await axios.get(
@@ -116,7 +69,7 @@ function Tasks() {
       setTasks(userTasks);
       setFilteredTasks(userTasks);
     }
-  }, []);
+  }, [setTasks]);
 
   useEffect(() => {
     const run = async () => {
@@ -170,47 +123,20 @@ function Tasks() {
       }
       handleCloseModal();
     },
-    [mode, tasks, handleCloseModal]
+    [mode, tasks, handleCloseModal,setTasks]
   );
 
-  const getCompletedTasks = useCallback(() => {
-    setFilteredTasks(tasks.filter((t) => t.isCompleted));
-  }, [tasks]);
 
-  const getNonCompletedTasks = useCallback(() => {
-    setFilteredTasks(tasks.filter((t) => !t.isCompleted));
-  }, [tasks]);
+  const borderColor = useMemo(() => ({
+    border: `4px solid ${theme}`
+  }), [theme])
 
-  const getAllTasks = useCallback(() => {
-    setFilteredTasks(tasks);
-  }, [tasks]);
 
-  const setCardTheme = useCallback( (color) => {
-    setTheme(color);
-    localStorage.setItem("themeColor", color);
-  },[]);
-
-  const borderColor =useMemo(()=> ({
-     border: `4px solid ${theme}`
-  }),[theme])
-
-  //The DropDown component re-renders on every Tasks render due to new array references.
-  const filterActions = useMemo(() => [
-    getAllTasks,
-    getCompletedTasks,
-    getNonCompletedTasks
-  ], [getAllTasks, getCompletedTasks, getNonCompletedTasks]);
 
   return (
     <section className={`row justify-center ${Style.tasks} container`}>
-      <div className={`row ${Style.filter}`}>
-        <input type="color" onChange={(e) => setCardTheme(e.target.value)} aria-label="Choose your theme color" />
-        <DropDown
-          items={FILTER_ITEMS}
-          Actions={filterActions}
-          aria-label="Filter tasks"
-        />
-      </div>
+
+      <TasksFilter setTheme={setTheme} setFilteredTasks={setFilteredTasks} tasks={tasks} />
 
       {displayModal && (
         <TaskContainer
@@ -222,66 +148,18 @@ function Tasks() {
       )}
 
 
-      <div className={`row ${Style["tasks-list"]}`} onMouseUp={handleMouseUp}>
+      <DragDropProvider
+        filteredTasks={filteredTasks}
+        setFilteredTasks={setFilteredTasks}
+        setTasks={setTasks}
+      >
+        <TaskList
+          borderColor={borderColor}
+          checkTask={checkTask}
+          handleOpenModal={handleOpenModal}
+        />
+      </DragDropProvider>
 
-        <div
-          className={`row justify-center ${Style.create} ${Style.card}`}
-          onClick={() => handleOpenModal("create")}
-          style={borderColor}
-          aria-label="Create Task"
-        >
-          <FaPlus color="#c2d5f6" size={24} />
-        </div>
-
-        {filteredTasks?.map((task, index) => (
-          <div
-            key={task.id}
-            aria-label="Task, draggable"
-            className={`row justify-center ${Style.card}`}
-            style={borderColor}
-            onMouseDown={handleMouseDown(index)}
-            onMouseMove={handleMove(index)}
-          >
-            <div className={`row ${Style['drag-icon']}`} aria-label="Drag icon">
-              <MdDragIndicator />
-            </div>
-
-            <h2>{task.title}</h2>
-            <p>{task.description}</p>
-            <time>{new Date(task.dueDate).toLocaleDateString()}</time>
-
-            <div className={`row justify-center ${Style["options"]}`}>
-              <button
-                aria-label={`Delete task ${task.title}`}
-                onClick={() => handleOpenModal("delete", task)}
-              >
-                <FaTrash color="red" size={22} />
-              </button>
-
-              <button
-                aria-label={`Edit task ${task.title}`}
-                onClick={() => handleOpenModal("update", task)}
-              >
-                <FaEdit color="#c2d5f6" size={22} />
-              </button>
-
-              <button
-                aria-label={`Display details of task ${task.title}`}
-                onClick={() => handleOpenModal("details", task)}
-              >
-                <FaInfoCircle color="black" size={22} />
-              </button>
-
-              <input
-                type="checkbox"
-                checked={task.isCompleted}
-                onChange={() => checkTask(task)}
-                aria-label={`Mark task ${task.title} as completed`}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
     </section>
   );
 }

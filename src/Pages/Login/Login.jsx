@@ -7,6 +7,7 @@ import Loader from "../../Components/Loader/Loader";
 import { useContext } from "react";
 import {UserContext} from "../../Context/UserContext";
 import MessageAlert from "../../Components/Alert/MessageAlert";
+import Style from '../../Styles/auth.module.css'
 
 function Login(){
     const [error, setError]=useState();
@@ -77,8 +78,8 @@ function Login(){
     return(
         <>
             {showAlert && <MessageAlert type="success" message={alertMessage} duration={2000} /> }
-            <div className={`row flex-direction-column auth-page`}>
-                <section className={`flex flex-direction-column form-section`}>   
+            <div className={`row flex-direction-column ${Style['auth-page']}`}>
+                <section className={`flex flex-direction-column ${Style['form-section']}`}>   
                     <h2>SignIn</h2>   
                     <FormContainer onSubmit={loginSubmit} serverError={error} initialData={null}>
                         <LoginForm />

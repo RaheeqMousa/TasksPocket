@@ -10,7 +10,8 @@ function Confirmation({message,onClose }) {
   };
 
   const handleClose = useCallback(
-    (choice) => {
+    (choice) =>{
+      console.log("close");
       setClosing(true);
       setTimeout(() => {
         onClose(choice);
@@ -55,10 +56,10 @@ function Confirmation({message,onClose }) {
         <div className={`row ${Style['modal-content']} ${closing ? Style.hide : Style.show}`}  >            
             <p id="confirmation-alert-message">{message}</p>
             <div className={`row ${Style.actions}`}>
-                <button className={Style['cancel']} onClick={() => { handleClose(false);}}>
+                <button className={Style['cancel']} onClick={()=>handleClose(false)}>
                 Cancel
                 </button>
-                <button className={Style['confirm']} onClick={() => { handleClose(true); }}>
+                <button className={Style['confirm']} onClick={()=>handleClose(true)}>
                 Confirm
                 </button>
             </div>
