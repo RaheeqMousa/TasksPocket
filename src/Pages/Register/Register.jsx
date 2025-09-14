@@ -5,10 +5,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Style from '../../Styles/auth.module.css';
+import { useContext } from "react";
+import {UserContext} from "../../Context/UserContext";
 
 function Register() {
     const [serverError, setServerError] = useState("");
     const navigate = useNavigate();
+    const {setUser}= useContext(UserContext); //Destructing
 
     const registerSubmit = async (data) => {
         const { username, email, password } = data;
@@ -32,9 +35,11 @@ function Register() {
 
             const createdUser = await response.data;
 
-            localStorage.setItem('userId', createdUser.id);
-
-            navigate('/user/profile');
+            if(response.status===200){
+                localStorage.setItem('userId', createdUser.id);
+                setUser(createdUser);
+                navigate('/user/profile');
+            }
         } catch (er) {
             console.error("Error creating user:", er);
             setServerError("");
@@ -53,6 +58,7 @@ function Register() {
             localStorage.setItem("userId", fallbackId);
 
             if (users.some((u) => u.id === fallbackId)) {
+                setUser(newLocalUser);
                 navigate("/user/profile");
             }
         }

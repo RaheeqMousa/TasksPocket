@@ -50,11 +50,8 @@ function Tasks() {
         `${import.meta.env.VITE_API_BASE_URL}/Tasks/user/${localStorage.getItem("userId")}`
       );
       if (res.data) {
-        const sorted = [...res.data].sort(
-          (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
-        );
-        setTasks(sorted);
-        setFilteredTasks(sorted);
+        setTasks(res.data);
+        setFilteredTasks(res.data);
       }
     } catch (e) {
       console.error(e);

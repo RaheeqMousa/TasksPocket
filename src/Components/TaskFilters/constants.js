@@ -1,1 +1,1 @@
-export const FILTER_ITEMS = ["All", "Completed", "Not completed"];
+export const FILTER_ITEMS = ["All", "Completed", "Not completed", "Nearest due date"];

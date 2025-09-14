@@ -24,6 +24,7 @@ function Profile(){
     
     const handleSubmit=()=>{
         localStorage.removeItem('userId');
+        localStorage.removeItem('themeColor');
         setUser(null);
         navigate('/auth/login');
     }

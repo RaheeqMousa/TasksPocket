@@ -20,17 +20,26 @@ function TasksFilter(props){
     setFilteredTasks(tasks);
   }, [tasks, setFilteredTasks]);
 
+    const nearestDueDateAction = useCallback(() => {
+      const sortedTasks = [...tasks].sort((a, b) => 
+        new Date(a.dueDate) - new Date(b.dueDate)
+      );
+      setFilteredTasks(sortedTasks);
+    },[tasks, setFilteredTasks]);
+
   const setCardTheme = useCallback( (color) => {
     setTheme(color);
     localStorage.setItem("themeColor", color);
   },[setTheme]);
 
   
-      const filterActions = useMemo(() => [
+    const filterActions = useMemo(() => [
       getAllTasks,
       getCompletedTasks,
-      getNonCompletedTasks
-    ], [getAllTasks, getCompletedTasks, getNonCompletedTasks]);
+      getNonCompletedTasks,
+      nearestDueDateAction
+    ], [getAllTasks, getCompletedTasks, getNonCompletedTasks, nearestDueDateAction]);
+
 
     return (
     <div className={`row ${Style.filter}`}>
