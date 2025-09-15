@@ -21,16 +21,13 @@ function TasksProgressBar(props){
     );
 
 }
-export default TasksProgressBar;
 
-TasksProgressBar.PropTypes={
+TasksProgressBar.propTypes = {
     tasks: PropTypes.arrayOf(
         PropTypes.shape({
-            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-            title: PropTypes.string,
-            description: PropTypes.string,
             isCompleted: PropTypes.bool.isRequired,
-            dueDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-    })
-    ),
-}
+        })
+    ).isRequired,
+};
+
+export default TasksProgressBar;
