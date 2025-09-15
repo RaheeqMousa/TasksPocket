@@ -27,6 +27,18 @@ function TasksFilter(props){
       setFilteredTasks(sortedTasks);
     },[tasks, setFilteredTasks]);
 
+  const todayOnly = useCallback(() => {
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0]; // "YYYY-MM-DD"
+    
+    setFilteredTasks(
+      tasks.filter((t) => {
+        const taskDateString = new Date(t.dueDate).toISOString().split('T')[0];
+        return taskDateString === todayString;
+      })
+    );
+  }, [tasks, setFilteredTasks]);
+
   const setCardTheme = useCallback( (color) => {
     setTheme(color);
     localStorage.setItem("themeColor", color);
@@ -37,8 +49,9 @@ function TasksFilter(props){
       getAllTasks,
       getCompletedTasks,
       getNonCompletedTasks,
-      nearestDueDateAction
-    ], [getAllTasks, getCompletedTasks, getNonCompletedTasks, nearestDueDateAction]);
+      nearestDueDateAction,
+      todayOnly
+    ], [getAllTasks, getCompletedTasks, getNonCompletedTasks, nearestDueDateAction, todayOnly]);
 
 
     return (

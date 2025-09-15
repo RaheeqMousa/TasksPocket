@@ -6,6 +6,7 @@ import TasksFilter from "../../Components/TaskFilters/TasksFilter.jsx";
 import TaskList from "../../Components/TaskList/TaskList.jsx";
 import { DragDropProvider } from "../../Context/DragDropContext/DragDropProvider.jsx";
 import useUserTasks from "../../Hooks/UseUserTasks.jsx";
+import TasksProgressBar from "../../Components/TasksProgressBar/TasksProgressBar.jsx";
 
 function Tasks() {
   const [mode, setMode] = useState("create");
@@ -135,6 +136,8 @@ function Tasks() {
 
       <TasksFilter setTheme={setTheme} setFilteredTasks={setFilteredTasks} tasks={tasks} />
 
+      <TasksProgressBar tasks={filteredTasks} />
+
       {displayModal && (
         <TaskContainer
           mode={mode}
@@ -143,7 +146,6 @@ function Tasks() {
           onSuccess={handleTaskSuccess}
         />
       )}
-
 
       <DragDropProvider
         filteredTasks={filteredTasks}

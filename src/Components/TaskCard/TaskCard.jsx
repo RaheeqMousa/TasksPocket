@@ -5,7 +5,7 @@ import Style from './TaskCard.module.scss';
 import { memo } from "react";
 import { TbUrgent } from "react-icons/tb";
 import { IoIosWarning } from "react-icons/io";
-import { FaCalendar } from "react-icons/fa";
+import { FaCalendar, FaCheckSquare } from "react-icons/fa";
 
 function TaskCard(props) {
 
@@ -19,14 +19,17 @@ function TaskCard(props) {
     const due= new Date(task.dueDate);
     const diff= due -today;
     const daysLeft= Math.ceil(diff/(1000* 24* 60* 60));
-    let dateClass="";
-    if(daysLeft>=0 && daysLeft<=3){
+    let dateClass="finished";
+
+    if(!task.isCompleted && daysLeft>=0 && daysLeft<=3){
         dateClass="warning";
-    }else if(daysLeft<0){
+    }else if(!task.isCompleted && daysLeft<0){
         dateClass="urgent";
-    }else{
+    }else if(!task.isCompleted && daysLeft>3){
         dateClass="coming";
     }
+
+    
 
   return (
     <div
@@ -37,7 +40,11 @@ function TaskCard(props) {
       onMouseMove={handleMove(index)}
     >
       <div className={`row ${Style['drag-icon']}`} aria-label="Drag icon">
-        {dateClass==='urgent'? <TbUrgent color="red" size={26} /> : dateClass==='warning'? <IoIosWarning color="orange" size={26} />: <FaCalendar color="green" size={24} />}
+        {task.isCompleted? <FaCheckSquare color="green" size={24} /> : 
+          dateClass==='urgent'? <TbUrgent color="red" size={26} /> : 
+          dateClass==='warning'? <IoIosWarning color="orange" size={26} />: 
+          <FaCalendar color="green" size={24} />}
+
         <MdDragIndicator />
       </div>
 
