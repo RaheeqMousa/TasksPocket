@@ -24,7 +24,7 @@ function TaskDetails({task}){
 }
 export default TaskDetails;
 
-TaskDetails.PropTypes={
+TaskDetails.propTypes={
     task: PropTypes.shape({
         title: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,

@@ -40,7 +40,7 @@ function RegisterForm(props) {
 }
 export default RegisterForm;
 
-RegisterForm.PropTypes = {
+RegisterForm.propTypes = {
     register:PropTypes.func.isRequired,
-    errors: PropTypes.string
+    errors: PropTypes.object
 };

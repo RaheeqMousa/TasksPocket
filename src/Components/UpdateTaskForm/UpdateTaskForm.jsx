@@ -38,7 +38,7 @@ function UpdateTaskForm(props){
 }
 export default UpdateTaskForm;
 
-UpdateTaskForm.PropTypes = {
+UpdateTaskForm.propTypes = {
     register:PropTypes.func.isRequired,
-    errors: PropTypes.string
+    errors: PropTypes.object
 };

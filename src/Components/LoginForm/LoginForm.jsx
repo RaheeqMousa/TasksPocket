@@ -21,7 +21,7 @@ function LoginForm(props){
 }
 export default LoginForm;
 
-LoginForm.PropTypes = {
+LoginForm.propTypes = {
     register:PropTypes.func.isRequired,
-    errors: PropTypes.string
+    errors: PropTypes.object
 };

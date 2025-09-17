@@ -29,7 +29,7 @@ function CreateTaskForm(props){
 }
 export default CreateTaskForm;
 
-CreateTaskForm.PropTypes = {
+CreateTaskForm.propTypes = {
     register:PropTypes.func.isRequired,
-    errors: PropTypes.string
+    errors: PropTypes.object
 };
