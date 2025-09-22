@@ -20,7 +20,7 @@ function UserContextProvider({children}){
             setLoading(false);
             return;
         }
-
+        
         try{
             const res=await axios.get(`${import.meta.env.VITE_API_BASE_URL}/Users/${token}`);
             setUser(res.data);
@@ -29,7 +29,6 @@ function UserContextProvider({children}){
             const users=JSON.parse(localStorage.getItem('users')||'[]');
             const searchedUser=users.find(u=> u.id===token);
             setUser(searchedUser);
-        
         }finally{
             setLoading(false);
         }

@@ -11,7 +11,7 @@ function LoginForm(props){
             </div>
             <p className="error">{errors.username?errors.username.message:''}</p>
             <div className={`flex field`}>
-                <label htmlFor="username">Password</label>
+                <label htmlFor="password">Password</label>
                 <input id="password" type="password" name="password" {...register("password", {required:'Password is required'})} />
             </div>
             <p className="error">{errors.password?errors.password.message:''}</p>
