@@ -1,0 +1,44 @@
+.carousel{
+  justify-content: center;
+  width: 100%;
+}
+.slide {
+  position: relative;
+  width: 100%;
+  border-radius: 10px;
+  margin: 50px 0px;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+   height: 500px;
+  width: 800px;
+}
+
+.slide button{
+  background: none;
+}
+
+.slide img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.controls {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  padding: 0 10px;
+}
+
+.controls svg{
+  cursor: pointer;
+}
+
+
+@media screen and (max-width: 500px) {
+  .slide{
+    height: 250px;
+    width: 100%;
+  }
+}

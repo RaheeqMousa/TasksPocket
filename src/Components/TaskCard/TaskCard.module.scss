@@ -1,0 +1,72 @@
+
+.card{
+        width: 200px;
+        height: 250px;
+        margin: 10px 0px;
+        border-radius: 20px;
+        transition: all 0.5s;
+        flex-direction: column;
+        cursor: grab;
+        transition: all 0.2s;
+
+        &:active{
+            cursor: grabbing;
+            user-select: none;
+            box-shadow:  0 4px 12px 0 rgba(0, 0, 0, 0.4);
+            opacity: 0.5;
+        }
+
+        .drag-icon{
+            width: 90%;
+        }
+
+        p{
+            font-weight: 600;
+        }
+
+        h2{
+            font-family: var(--taskFont);
+        }
+        font-family: var(--taskFont);
+
+        input[type="checkbox"]{
+            width: 20px;
+            height: 20px;
+        }
+
+        svg{
+            cursor: pointer;
+        }
+        
+        &:hover{
+            transform: scale(1.04);
+        }
+
+        .urgent{
+            color: red;
+        }
+        .warning{
+            color: orange;
+        }
+        .coming{
+            color: green;
+        }
+
+        .finished{
+            color: black;
+        }
+    }
+
+    .options{
+        align-self: flex-end;
+        width: 100%;
+        margin-top: 30px;
+        gap:10px;
+
+        button{
+            background: none;
+        }
+        @media screen and (max-width: 1000px) {
+            align-self: center;
+        }
+    }

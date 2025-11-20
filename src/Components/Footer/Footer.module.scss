@@ -1,0 +1,26 @@
+footer{
+    background-color: black;
+    padding: 10px 20px;
+    gap:20px;
+    min-width: 150px;
+
+    a,span,h4{
+        color: white;
+    }
+
+    a.email{
+        text-decoration: underline;
+    }
+
+    .links,.social{
+        gap:10px;
+        a{
+            display: inline-block;
+            transition: all 0.6s;
+            &:hover{
+                transform: scale(1.1);
+            }
+        }
+    }
+
+}

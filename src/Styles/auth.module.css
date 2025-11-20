@@ -1,0 +1,13 @@
+.auth-page{
+    justify-content: center;
+    background: linear-gradient(145deg, #6F42C1, #C0C0C0);
+}
+
+.auth-page .form-section{
+    margin: 134px 0px;
+    gap:40px
+}
+
+.auth-page .form-section h2{
+    text-align: center;
+}

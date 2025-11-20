@@ -1,0 +1,13 @@
+.tasks{
+    width: 100%;
+    flex-direction: column;
+    justify-self: center;
+    flex-wrap: wrap;
+    margin: 10px;
+
+    @media screen and (max-width:1000px) {
+        width: 100% !important;
+    }
+
+}
+

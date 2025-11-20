@@ -1,0 +1,23 @@
+    .tasks-list {
+        justify-content: flex-start;
+        width: 100%;
+        gap: 25px;
+        margin: 30px 0px;
+
+        @media screen and (max-width:1000px) {
+            justify-content: center;
+        }
+
+        .card{
+            width: 200px;
+            height: 250px;
+            margin: 10px 0px;
+            border-radius: 20px;
+            transition: all 0.5s;
+            flex-direction: column;
+        }
+    }
+
+    .create {
+        cursor: pointer;
+    }

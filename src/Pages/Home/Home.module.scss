@@ -1,0 +1,26 @@
+.goal{
+    margin: 40px 0px;
+    justify-self: center;
+    justify-content: center;
+    width: 100%;
+    gap:50px;
+
+    span{
+        font-size: 32px;
+        max-width: 300px;
+    }
+    img{
+        width: 700px;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 20px;
+
+        @media screen and (max-width: 768px) {
+            width: 100%;
+        }
+        
+        @media screen and (max-width: 500px) {
+            height: 250px;
+        }
+    }
+}
